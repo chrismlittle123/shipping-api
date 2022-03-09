@@ -4,6 +4,11 @@ import requests
 from aws_lambda_powertools.utilities.typing import LambdaContext
 
 
+def create_vessel_item(raw_vessel_data: dict) -> dict:
+
+    return {"a": 1, "b": 2}
+
+
 def get_urls() -> dict:
     return {"cinch": "https://www.cinch.co.uk/"}
 

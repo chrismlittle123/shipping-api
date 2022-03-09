@@ -34,7 +34,7 @@ plugins:
 functions:
   data-ingestion:
     description: "Lambda that ingests and cleans raw shipping data"
-    role: ${ssm:/${self:project}/data-ingestion/lambda-iam-role/arn}
+    role: arn:aws:iam::495700631743:role/shipping-api/data-ingestion/shipping-api-lambda-role
     handler: src.data_ingestion.handler.handler
     package:
       patterns:

@@ -17,6 +17,7 @@
 # Package directories
 *node_modules/
 yarn-error.log
+.requirements.zip
 
 # Python
 *__pycache__/
