@@ -33,7 +33,7 @@ plugins:
   - serverless-python-requirements
 functions:
   data-ingestion:
-    description: "AWS Lambda template"
+    description: "Lambda that ingests and cleans raw shipping data"
     role: ${ssm:/${self:project}/data-ingestion/lambda-iam-role/arn}
     handler: src.data_ingestion.handler.handler
     package:
