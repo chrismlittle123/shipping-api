@@ -28,9 +28,6 @@ custom:
     zip: true
     slim: true
     layer: true
-    dockerizePip: true
-    useDownloadCache: false
-    useStaticCache: false
 
 plugins:
   - serverless-python-requirements
