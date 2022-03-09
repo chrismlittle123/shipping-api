@@ -2,7 +2,7 @@ import json
 import os
 from pathlib import Path
 
-from src.data_ingestion.handler import create_vessel_item, get_urls
+from src.data_ingestion.handler import create_vessel_item
 
 
 def test_create_vessel_item():
@@ -77,11 +77,3 @@ def test_create_vessel_item():
         vessel_clean = json.load(file)
 
     assert create_vessel_item(raw_vessel_data) == vessel_clean
-
-
-def test_true_is_true():
-    assert True
-
-
-def test_get_urls():
-    assert get_urls() == {"cinch": "https://www.cinch.co.uk/"}
