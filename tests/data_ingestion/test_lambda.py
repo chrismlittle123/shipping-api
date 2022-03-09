@@ -71,7 +71,9 @@ def test_create_vessel_item():
         "average_density_of_the_cargo_transported_m_tonnes_m": None,
     }
 
-    json_path = os.path.join(*[Path(__file__).parent, "resources", "vessel_clean.json"])
+    json_path = os.path.join(
+        *[Path(__file__).parents[1], "resources", "vessel_clean.json"]
+    )
 
     with open(json_path) as file:
         vessel_clean = json.load(file)
