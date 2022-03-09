@@ -1,11 +1,32 @@
 import json
 import logging
+import urllib.parse
+from typing import Union
 
-import requests
+import boto3
+import pandas as pd
 from aws_lambda_powertools.utilities.typing import LambdaContext
 
 LOGGER = logging.getLogger()
 LOGGER.setLevel(logging.INFO)
+
+
+def read_csv_from_s3(event: dict) -> Union[pd.DataFrame, None]:
+
+    s3_client = boto3.client("s3")
+
+    bucket = event["Records"][0]["s3"]["bucket"]["name"]
+    key = urllib.parse.unquote_plus(
+        event["Records"][0]["s3"]["object"]["key"], encoding="utf-8"
+    )
+    # try:
+    response = s3_client.get_object(Bucket=bucket, Key=key)
+    df = pd.read_csv(response.get("Body"))
+    # except Exception as e:
+    #     LOGGER.info({"message": "Error", "content": e})
+    #     return None
+
+    return df
 
 
 def create_vessel_item(raw_vessel_data: dict) -> dict:
@@ -203,17 +224,14 @@ def create_vessel_item(raw_vessel_data: dict) -> dict:
     }
 
 
-def get_urls() -> dict:
-    return {"cinch": "https://www.cinch.co.uk/"}
-
-
 def handler(event: dict, context: LambdaContext) -> dict:
-    urls = get_urls()
-    sample_url = urls["cinch"]
-    resp = requests.get(sample_url)
-    LOGGER.info({"message": "Response", "content": resp})
-    return {
-        "statusCode": resp.status_code,
-        "headers": {"Content-Type": "application/json"},
-        "body": json.dumps({"response": resp.text}),
-    }
+
+    LOGGER.info({"message": "Incoming event", "content": event})
+    df = read_csv_from_s3(event)
+
+    if df:
+        return {
+            "body": json.dumps({"response": df.loc[0].to_json()}),
+        }
+
+    return {"body": None}

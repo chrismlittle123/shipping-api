@@ -6,12 +6,14 @@ name = "pypi"
 [packages]
 requests = "*"
 pandas = "*"
+numpy = "*"
 aws-lambda-powertools = "*"
 
 [dev-packages]
 ipykernel = "*"
 pytest = "*"
 mypy = "*"
+boto3 = "*"
 
 [requires]
 python_version = "3.9"
