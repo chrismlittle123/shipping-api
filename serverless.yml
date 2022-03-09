@@ -28,7 +28,6 @@ custom:
     zip: true
     slim: true
     layer: true
-    dockerizePip: true
     useDownloadCache: false
 
 plugins:

@@ -1,8 +1,6 @@
 name: Github Actions Pipeline
 
-# Built using the following templates:
-# https://github.com/serverless/github-action
-# https://github.com/mirrorhanyu/serverless-github-action-python
+# Built using the following template: https://github.com/serverless/github-action
 
 on:
   push:
@@ -61,6 +59,7 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - run: npm ci
+    - run: export SLS_DEBUG=*
     - name: Serverless deploy
       uses: serverless/github-action@v2
       with:
