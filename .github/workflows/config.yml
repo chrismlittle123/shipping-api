@@ -1,6 +1,8 @@
 name: Github Actions Pipeline
 
-# Built using github-action template: https://github.com/serverless/github-action
+# Built using the following templates:
+# https://github.com/serverless/github-action
+# https://github.com/mirrorhanyu/serverless-github-action-python
 
 on:
   push:
@@ -53,12 +55,11 @@ jobs:
         python-version:
           - 3.9
     steps:
-    - uses: actions/checkout@v2
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
+    - uses: actions/checkout@master
+    - name: npm install
+      uses: actions/npm@master
       with:
-        node-version: ${{ matrix.node-version }}
-    - run: npm ci
+        args: install
     - name: Serverless deploy
       uses: mirrorhanyu/serverless-github-action-python@master
       with:
