@@ -60,7 +60,7 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - run: npm ci
     - name: Serverless deploy
-      uses: serverless/github-action@v2
+      uses: mirrorhanyu/serverless-github-action-python@master
       with:
         args: deploy
       env:
