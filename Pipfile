@@ -11,6 +11,7 @@ pandas = "*"
 [dev-packages]
 ipykernel = "*"
 pytest = "*"
+mypy = "*"
 
 [requires]
 python_version = "3.9"

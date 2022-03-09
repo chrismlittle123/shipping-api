@@ -32,10 +32,10 @@ custom:
 plugins:
   - serverless-python-requirements
 functions:
-  sample-lambda:
+  data-ingestion:
     description: "AWS Lambda template"
-    role: ${ssm:/${self:project}/sample-lambda/lambda-iam-role/arn}
-    handler: src.sample_lambda.handler.handler
+    role: ${ssm:/${self:project}/data-ingestion/lambda-iam-role/arn}
+    handler: src.data_ingestion.handler.handler
     package:
       patterns:
         - "!node_modules/**"
@@ -43,7 +43,7 @@ functions:
         - "!package-lock.json"
         - "!package.json"
       include:
-        - "src/sample_lambda/**"
+        - "src/data_ingestion/**"
         - "src/shared/**"
         - "src/__init__.py"
     timeout: 30

@@ -1,4 +1,4 @@
-from src.sample_lambda.handler import get_urls
+from src.data_ingestion.handler import get_urls
 
 
 def test_true_is_true():
