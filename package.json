@@ -1,0 +1,14 @@
+{
+  "name": "lambda-template",
+  "version": "0.1.0",
+  "devDependencies": {
+    "serverless": "^2.67.0",
+    "serverless-python-requirements": "^5.3.1"
+  },
+  "scripts": {
+    "install-python-deps": "pipenv install --dev",
+    "test": "pipenv run python3 -m pytest tests",
+    "mypy": "pipenv run mypy",
+    "deploy-serverless": "serverless deploy"
+  }
+}

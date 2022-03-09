@@ -1,0 +1,52 @@
+service: lambda-template
+# Variable names must be the same as in env.tfvars file
+aws_account_id: 495700631743
+project: lambda-template
+
+
+variablesResolutionMode: 20210326
+
+package:
+  individually: true
+  exclude:
+    - "*/**"
+
+provider:
+  name: aws
+  stage: dev
+  runtime: python3.9
+  region: eu-west-2
+  timeout: 30
+  memorySize: 1024
+  lambdaHashingVersion: 20201221
+  deploymentPrefix: serverless-lambdas
+
+
+custom:
+  pythonRequirements:
+    usePoetry: false
+    zip: true
+    slim: true
+    layer: true
+
+plugins:
+  - serverless-python-requirements
+functions:
+  sample-lambda:
+    description: "AWS Lambda template"
+    role: ${ssm:/${self:project}/sample-lambda/lambda-iam-role/arn}
+    handler: src.sample_lambda.handler.handler
+    package:
+      patterns:
+        - "!node_modules/**"
+        - "!yarn.lock"
+        - "!package-lock.json"
+        - "!package.json"
+      include:
+        - "src/sample_lambda/**"
+        - "src/shared/**"
+        - "src/__init__.py"
+    timeout: 30
+    memorySize: 1024
+    layers:
+      - { Ref: PythonRequirementsLambdaLayer }

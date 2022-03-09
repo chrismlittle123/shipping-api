@@ -1,0 +1,5 @@
+[MAIN]
+# Add files or directories matching the regex patterns to the blacklist. The
+# regex matches against base names, not paths.
+ignore = tests
+disable = W0613, C0114, C0116, C0304, E0401
