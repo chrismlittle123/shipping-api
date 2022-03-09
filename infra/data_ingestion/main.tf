@@ -17,3 +17,8 @@ resource "aws_iam_role_policy_attachment" "lambda_iam_to_policy_attachment" {
   policy_arn = aws_iam_policy.inline_policy.arn
   role       = aws_iam_role.lambda_iam.name
 }
+
+
+resource "aws_s3_bucket" "shipping_api_bucket" {
+  bucket = "${var.project}-${var.aws_account_id}"
+}
