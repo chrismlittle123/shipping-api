@@ -36,6 +36,14 @@ functions:
     description: "Lambda that ingests and cleans raw shipping data"
     role: ${ssm:/${self:project}/data-ingestion/lambda-iam-role/arn}
     handler: src.data_ingestion.handler.handler
+    events:
+      - s3:
+          bucket: ${self:project}-${self:aws_account_id}
+          event: s3:ObjectCreated:*
+          rules:
+            - prefix: raw/
+            - suffix: .csv
+
     package:
       patterns:
         - "!node_modules/**"
