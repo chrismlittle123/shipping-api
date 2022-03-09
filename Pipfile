@@ -5,8 +5,7 @@ name = "pypi"
 
 [packages]
 requests = "*"
-pandas = "*"
-numpy = "*"
+pandas = "==1.4.0"
 aws-lambda-powertools = "*"
 
 [dev-packages]

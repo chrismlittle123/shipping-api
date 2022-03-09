@@ -226,10 +226,10 @@ def create_vessel_item(raw_vessel_data: dict) -> dict:
 
 def handler(event: dict, context: LambdaContext) -> dict:
 
-    LOGGER.info({"message": "Incoming event", "content": event})
+    LOGGER.info({"message": "Incoming event", "content": json.dumps(event)})
     df = read_csv_from_s3(event)
 
-    if df:
+    if df is not None:
         return {
             "body": json.dumps({"response": df.loc[0].to_json()}),
         }
