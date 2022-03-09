@@ -28,3 +28,9 @@ Run tests:
 Ensure you are logged into the AWS CLI and run:
 
 `pipenv run serverless invoke local --function <lambda_name> --path <json_file>`
+
+# Deploy Serverless
+
+Run the following comman:
+
+`pipenv run serverless deploy`

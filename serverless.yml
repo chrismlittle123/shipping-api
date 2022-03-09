@@ -28,6 +28,7 @@ custom:
     zip: true
     slim: true
     layer: true
+    dockerizePip: true
 
 plugins:
   - serverless-python-requirements
