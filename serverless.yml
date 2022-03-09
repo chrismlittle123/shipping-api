@@ -1,7 +1,7 @@
-service: lambda-template
+service: shipping-api
 # Variable names must be the same as in env.tfvars file
 aws_account_id: 495700631743
-project: lambda-template
+project: shipping-api
 
 
 variablesResolutionMode: 20210326

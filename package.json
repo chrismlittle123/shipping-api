@@ -1,5 +1,5 @@
 {
-  "name": "lambda-template",
+  "name": "shipping-api",
   "version": "0.1.0",
   "devDependencies": {
     "serverless": "^2.67.0",

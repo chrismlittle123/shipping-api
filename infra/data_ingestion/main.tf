@@ -1,5 +1,5 @@
 locals {
-  service_name = "sample-lambda"
+  service_name = "data-ingestion"
 }
 resource "aws_iam_role" "lambda_iam" {
   force_detach_policies = true
