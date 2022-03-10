@@ -12,13 +12,7 @@ import boto3
 from aws_lambda_powertools.utilities.typing import LambdaContext
 
 LOGGER = logging.getLogger()
-LOGGER.setLevel(logging.INFO)
-
-
-def make_upper_case(value: str) -> str:
-    if isinstance(value, str):
-        return value.upper()
-    return value
+LOGGER.setLevel(logging.DEBUG)
 
 
 def clean_null_values(value: Union[str, int, float]) -> Union[str, int, float, None]:
@@ -53,7 +47,7 @@ def convert_date(date_raw: str) -> Union[str, None]:
 def clean_monitoring_methods(value: Union[str, None]) -> str:
     if value == "" or value is None:
         return "No"
-    return value
+    return value.strip()
 
 
 def extract_technical_efficiency(technical_efficiency: str) -> Union[float, None]:
@@ -78,7 +72,9 @@ def read_csv_from_s3(event: dict) -> Union[List[list], None]:
         csv_reader = csv.reader(content, delimiter=",")
         return [row for row in csv_reader]
     except Exception as error:
-        LOGGER.info({"message": "Error", "content": error})
+        LOGGER.error(
+            {"message": "Error when reading CSV file from S3", "content": error}
+        )
         return None
 
 
@@ -87,8 +83,6 @@ def convert_csv_to_dictionaries(csv_content: List[list]) -> List[dict]:
     return [dict(zip(columns, row)) for row in csv_content[1:]]
 
 
-# TO DO: Create a function which cleans vessel data dictionaries, output the data back as a CSV for inspection
-# TO DO: Finish building create_vessel_item function
 # TO DO: Create a pydantic model which is used to build the vessel item
 # TO DO: Write a function which writes objects to DynamoDB
 # TO DO: Write unit tests
@@ -127,7 +121,7 @@ def clean_raw_vessel_data(vessel_data_raw: dict, column_type_mappings: dict) -> 
     )
 
     vessel_data_raw = apply_cleaning_function(
-        vessel_data_raw, column_type_mappings["upper_case_columns"], make_upper_case
+        vessel_data_raw, column_type_mappings["upper_case_columns"], lambda x: x.upper()
     )
 
     vessel_data_raw = apply_cleaning_function(
