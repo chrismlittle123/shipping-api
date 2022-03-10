@@ -14,7 +14,7 @@
         "verifier_number": null,
         "verifier_name": "ICS VERIFICATION SERVICES SINGLE MEMBER P.C.",
         "verifier_accreditation_body": "HELLENIC ACCREDITATION SYSTEM (ESYD)",
-        "verifier_address": "55 FILONOS STR.\\n185 35 PIRAEUS, GREECE",
+        "verifier_address": "55 FILONOS STR.\n185 35 PIRAEUS, GREECE",
         "verifier_city": "PIRAEUS",
         "verifier_accreditation_number": "1101",
         "verifier_country": "GREECE"
@@ -28,17 +28,17 @@
         },
         "b":
         {
-            "value": null,
+            "value": "No",
             "description": "Bunker fuel tank monitoring on-board"
         },
         "c":
         {
-            "value": null,
+            "value": "No",
             "description": "Flow meters for applicable combustion processes"
         },
         "d":
         {
-            "value": null,
+            "value": "No",
             "description": "Direct CO2 emissions measurement"
         }
     },
@@ -49,13 +49,13 @@
             "total":
             {
                 "value": 6307.75,
-                "unit": "metric tonnes"
+                "unit": "metric tonne"
             },
             "annual_average":
             {
                 "per_distance":
                 {
-                    "value": null,
+                    "value": 139.07,
                     "unit": "kilogram / nautical mile"
                 },
                 "per_transport_work":
@@ -77,7 +77,7 @@
                     },
                     "passengers":
                     {
-                        "value": null,
+                        "value": 311.97,
                         "unit": "gram / (metric tonne * nautical mile)"
                     },
                     "freight":
@@ -86,174 +86,168 @@
                         "unit": "gram / (metric tonne * nautical mile)"
                     }
                 }
-            },
-            "laden_voyages":
+            }
+        },
+        "laden_voyages":
+        {
+            "total":
             {
-                "total":
+                "value": null,
+                "unit": "metric tonne"
+            },
+            "per_distance":
+            {
+                "value": null,
+                "unit": "kilogram / nautical mile"
+            },
+            "per_transport_work":
+            {
+                "mass":
                 {
-                    "value": 6307.75,
-                    "unit": "metric tonnes"
+                    "value": null,
+                    "unit": "gram / (metric tonne * nautical mile)"
                 },
-                "annual_average":
+                "volume":
                 {
-                    "per_distance":
+                    "value": null,
+                    "unit": "gram / (meter^3 * nautical mile)"
+                },
+                "deadweight_tonnage":
+                {
+                    "value": null,
+                    "unit": "gram / (metric tonne * nautical mile)"
+                },
+                "passengers":
+                {
+                    "value": null,
+                    "unit": "gram / (metric tonne * nautical mile)"
+                },
+                "freight":
+                {
+                    "value": null,
+                    "unit": "gram / (metric tonne * nautical mile)"
+                }
+            }
+        }
+    },
+    "co2_emissions_metrics":
+    {
+        "all_voyages":
+        {
+            "total":
+            {
+                "value": 20080.25,
+                "unit": "metric tonne"
+            },
+            "between_ports":
+            {
+                "value": 16035.42,
+                "unit": "metric tonne",
+                "description": "CO2 emissions from all voyages between ports under a Member State jurisdiction"
+            },
+            "departed_from_ports":
+            {
+                "value": 728.59,
+                "unit": "metric tonne",
+                "description": "CO2 emissions from all voyages which departed from ports under a Member State jurisdiction"
+            },
+            "to_ports":
+            {
+                "value": 974.78,
+                "unit": "metric tonne",
+                "description": "CO2 emissions from all voyages to ports under a Member State jurisdiction"
+            },
+            "within_ports_at_berth":
+            {
+                "value": 2341.47,
+                "unit": "metric tonne",
+                "description": "CO2 emissions which occurred within ports under a Member State jurisdiction at berth"
+            },
+            "passenger_transport":
+            {
+                "value": null,
+                "unit": "metric tonne"
+            },
+            "freight_transport":
+            {
+                "value": null,
+                "unit": "metric tonne"
+            },
+            "annual_average":
+            {
+                "per_distance":
+                {
+                    "value": 442.71,
+                    "unit": "kilogram / nautical mile"
+                },
+                "per_transport_work":
+                {
+                    "mass":
                     {
                         "value": null,
-                        "unit": "kilogram / nautical mile"
+                        "unit": "gram / (metric tonne * nautical mile)"
                     },
-                    "per_transport_work":
+                    "volume":
                     {
-                        "mass":
-                        {
-                            "value": null,
-                            "unit": "gram / (metric tonne * nautical mile)"
-                        },
-                        "volume":
-                        {
-                            "value": null,
-                            "unit": "gram / (meter^3 * nautical mile)"
-                        },
-                        "deadweight_tonnage":
-                        {
-                            "value": null,
-                            "unit": "gram / (metric tonne * nautical mile)"
-                        },
-                        "passengers":
-                        {
-                            "value": null,
-                            "unit": "gram / (metric tonne * nautical mile)"
-                        },
-                        "freight":
-                        {
-                            "value": null,
-                            "unit": "gram / (metric tonne * nautical mile)"
-                        }
+                        "value": null,
+                        "unit": "gram / (meter^3 * nautical mile)"
+                    },
+                    "deadweight_tonnage":
+                    {
+                        "value": null,
+                        "unit": "gram / (metric tonne * nautical mile)"
+                    },
+                    "passengers":
+                    {
+                        "value": 993.14,
+                        "unit": "gram / (metric tonne * nautical mile)"
+                    },
+                    "freight":
+                    {
+                        "value": null,
+                        "unit": "gram / (metric tonne * nautical mile)"
                     }
                 }
             }
         },
-        "co2_emissions_metrics":
+        "laden_voyages":
         {
-            "all_voyages":
+            "total":
             {
-                "total":
-                {
-                    "value": 20080.25,
-                    "unit": "metric tonnes"
-                },
-                "between_ports":
-                {
-                    "value": 16035.42,
-                    "unit": "metric tonnes",
-                    "description": "CO2 emissions from all voyages between ports under a Member State jurisdiction"
-                },
-                "departed_from_ports":
-                {
-                    "value": 728.59,
-                    "unit": "metric tonnes",
-                    "description": "CO2 emissions from all voyages which departed from ports under a Member State jurisdiction"
-                },
-                "to_ports":
-                {
-                    "value": 974.78,
-                    "unit": "metric tonnes",
-                    "description": "CO2 emissions from all voyages to ports under a Member State jurisdiction"
-                },
-                "within_ports_at_berth":
-                {
-                    "value": 2341.47,
-                    "unit": "metric tonnes",
-                    "description": "CO2 emissions which occurred within ports under a Member State jurisdiction at berth"
-                },
-                "passenger_transport":
-                {
-                    "value": null,
-                    "unit": "metric tonnes"
-                },
-                "freight_transport":
-                {
-                    "value": null,
-                    "unit": "metric tonnes"
-                },
-                "annual_average":
-                {
-                    "per_distance":
-                    {
-                        "value": null,
-                        "unit": "kilogram / nautical mile"
-                    },
-                    "per_transport_work":
-                    {
-                        "mass":
-                        {
-                            "value": null,
-                            "unit": "gram / (metric tonne * nautical mile)"
-                        },
-                        "volume":
-                        {
-                            "value": null,
-                            "unit": "gram / (meter^3 * nautical mile)"
-                        },
-                        "deadweight_tonnage":
-                        {
-                            "value": null,
-                            "unit": "gram / (metric tonne * nautical mile)"
-                        },
-                        "passengers":
-                        {
-                            "value": null,
-                            "unit": "gram / (metric tonne * nautical mile)"
-                        },
-                        "freight":
-                        {
-                            "value": null,
-                            "unit": "gram / (metric tonne * nautical mile)"
-                        }
-                    }
-                }
+                "value": null,
+                "unit": "metric tonne"
             },
-            "laden_voyages":
+            "per_distance":
             {
-                "total":
+                "value": null,
+                "unit": "kilogram / nautical mile"
+            },
+            "per_transport_work":
+            {
+                "mass":
                 {
                     "value": null,
-                    "unit": "metric tonnes"
+                    "unit": "gram / (metric tonne * nautical mile)"
                 },
-                "annual_average":
+                "volume":
                 {
-                    "per_distance":
-                    {
-                        "value": null,
-                        "unit": "kilogram / nautical mile"
-                    },
-                    "per_transport_work":
-                    {
-                        "mass":
-                        {
-                            "value": null,
-                            "unit": "gram / (metric tonne * nautical mile)"
-                        },
-                        "volume":
-                        {
-                            "value": null,
-                            "unit": "gram / (meter^3 * nautical mile)"
-                        },
-                        "deadweight_tonnage":
-                        {
-                            "value": null,
-                            "unit": "gram / (metric tonne * nautical mile)"
-                        },
-                        "passengers":
-                        {
-                            "value": null,
-                            "unit": "gram / (metric tonne * nautical mile)"
-                        },
-                        "freight":
-                        {
-                            "value": null,
-                            "unit": "gram / (metric tonne * nautical mile)"
-                        }
-                    }
+                    "value": null,
+                    "unit": "gram / (meter^3 * nautical mile)"
+                },
+                "deadweight_tonnage":
+                {
+                    "value": null,
+                    "unit": "gram / (metric tonne * nautical mile)"
+                },
+                "passengers":
+                {
+                    "value": null,
+                    "unit": "gram / (metric tonne * nautical mile)"
+                },
+                "freight":
+                {
+                    "value": null,
+                    "unit": "gram / (metric tonne * nautical mile)"
                 }
             }
         }
@@ -272,7 +266,7 @@
         },
         "total_time_spent_at_sea_through_ice":
         {
-            "value": 4170.2,
+            "value": null,
             "unit": "hour"
         }
     },
@@ -281,7 +275,7 @@
         "distance_travelled_through_ice":
         {
             "value": null,
-            "unit": "nautical miles"
+            "unit": "nautical mile"
         }
     },
     "density_metrics":
@@ -289,7 +283,7 @@
         "average_cargo_density":
         {
             "value": null,
-            "unit": "metric tonnes / m^3"
+            "unit": "metric tonne / meter^3"
         }
     },
     "additional_information": null
