@@ -12,7 +12,7 @@ import boto3
 from aws_lambda_powertools.utilities.typing import LambdaContext
 
 LOGGER = logging.getLogger()
-LOGGER.setLevel(logging.DEBUG)
+LOGGER.setLevel(logging.INFO)
 
 
 def clean_null_values(value: Union[str, int, float]) -> Union[str, int, float, None]:
