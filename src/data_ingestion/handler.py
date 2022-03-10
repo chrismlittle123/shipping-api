@@ -5,7 +5,6 @@ import os
 import re
 import urllib.parse
 from datetime import datetime
-from pathlib import Path
 from typing import Callable, List, Union
 
 import boto3
@@ -105,14 +104,9 @@ def apply_cleaning_function(
 
 def load_column_type_mappings() -> dict:
 
-    path_list: List[str] = [
-        str(Path(__file__).parents[2]),
-        "data",
-        "config",
-        "column_type_mappings.json",
-    ]
-
-    column_type_mappings_path = os.path.join(*path_list)
+    column_type_mappings_path = os.path.join(
+        *["data", "config", "column_type_mappings.json"]
+    )
 
     with open(column_type_mappings_path, "r") as file:
         column_type_mappings = json.load(file)
