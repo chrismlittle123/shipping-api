@@ -115,7 +115,7 @@ def test_create_vessel_item():
     vessel_data = copy(VESSEL_DATA_CLEAN)[0]
 
     json_path = os.path.join(
-        *[Path(__file__).parents[1], "resources", "vessel_item.json"]
+        *[Path(__file__).parents[2], "resources", "vessel_item.json"]
     )
 
     with open(json_path, "r") as file:
