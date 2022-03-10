@@ -4,8 +4,8 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-pandas = "*"
 aws-lambda-powertools = "*"
+pydantic = "*"
 
 [dev-packages]
 ipykernel = "*"
