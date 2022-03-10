@@ -28,6 +28,8 @@ custom:
     zip: true
     slim: true
     layer: true
+    useDownloadCache: true
+    useStaticCache: true
 
 plugins:
   - serverless-python-requirements
