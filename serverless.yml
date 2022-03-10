@@ -57,7 +57,6 @@ functions:
         - "src/data_ingestion/**"
         - "data/**"
         - "src/__init__.py"
-    timeout: 30
-    memorySize: 1024
+    timeout: 300
     layers:
       - { Ref: PythonRequirementsLambdaLayer }
