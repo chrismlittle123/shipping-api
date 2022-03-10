@@ -11,10 +11,15 @@ from typing import Callable, List, Optional, Union
 import boto3
 from aws_lambda_powertools.utilities.typing import LambdaContext
 
-from src.data_ingestion.pydantic_models import VesselItem
-
 LOGGER = logging.getLogger()
 LOGGER.setLevel(logging.INFO)
+
+
+def make_upper_case(value: str) -> Optional[str]:
+    try:
+        return value.upper()
+    except AttributeError:
+        return None
 
 
 def clean_null_values(value: Union[str, int, float]) -> Union[str, int, float, None]:
@@ -85,12 +90,6 @@ def convert_csv_to_dictionaries(csv_content: List[list]) -> List[dict]:
     return [dict(zip(columns, row)) for row in csv_content[1:]]
 
 
-# TO DO: Create a pydantic model which is used to build the vessel item
-# TO DO: Create a generator that writes VesselItem Object to dynamoDB
-# TO DO: Write unit tests
-# TO DO: Write integration test
-
-
 def apply_cleaning_function(
     dictionary_input: dict, columns: list, cleaning_function: Callable
 ) -> dict:
@@ -123,7 +122,7 @@ def clean_raw_vessel_data(vessel_data_raw: dict, column_type_mappings: dict) -> 
     )
 
     vessel_data_raw = apply_cleaning_function(
-        vessel_data_raw, column_type_mappings["upper_case_columns"], lambda x: x.upper()
+        vessel_data_raw, column_type_mappings["upper_case_columns"], make_upper_case
     )
 
     vessel_data_raw = apply_cleaning_function(
@@ -454,9 +453,12 @@ def process_raw_vessel_data(vessel_data_raw: dict, column_type_mappings: dict) -
 
     vessel_data = clean_raw_vessel_data(vessel_data_raw, column_type_mappings)
     vessel_item = create_vessel_item(vessel_data)
-    vessel_item_object = VesselItem(**vessel_item)
 
-    return json.loads(vessel_item_object.json())
+    return vessel_item
+
+
+def write_dictionary_to_dynamodb() -> None:
+    pass
 
 
 def main(event: dict) -> Optional[List[dict]]:
@@ -468,15 +470,13 @@ def main(event: dict) -> Optional[List[dict]]:
         vessel_data_raw_dictionaries = convert_csv_to_dictionaries(csv_content)
 
         vessel_list = []
+        for vessel_data_raw in vessel_data_raw_dictionaries[:5]:
 
-        for vessel_data_raw in vessel_data_raw_dictionaries:
-
-            vessel_item_object = process_raw_vessel_data(
-                vessel_data_raw, column_type_mappings
-            )
-            vessel_list.append(vessel_item_object)
+            vessel_item = process_raw_vessel_data(vessel_data_raw, column_type_mappings)
+            vessel_list.append(vessel_item)
 
         return vessel_list
+
     return None
 
 

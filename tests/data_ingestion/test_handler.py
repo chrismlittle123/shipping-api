@@ -1,6 +1,6 @@
 import json
 import os
-from copy import copy
+from copy import deepcopy
 from pathlib import Path
 
 import pytest
@@ -16,8 +16,9 @@ from src.data_ingestion.handler import (
     create_vessel_item,
     extract_technical_efficiency,
     load_column_type_mappings,
+    process_raw_vessel_data,
 )
-from tests.resources.vessel_data import VESSEL_DATA_CLEAN, VESSEL_DATA_RAW
+from tests.resources.vessel_data import VESSEL_DATA_CLEAN, VESSEL_DATA_RAW, VESSEL_ITEMS
 
 COLUMN_TYPE_MAPPINGS = load_column_type_mappings()
 
@@ -90,7 +91,7 @@ def test_convert_csv_to_dictionaries():
 
 @pytest.mark.parametrize(
     "vessel_data_raw, vessel_data_clean",
-    list(zip(copy(VESSEL_DATA_RAW), copy(VESSEL_DATA_CLEAN))),
+    list(zip(deepcopy(VESSEL_DATA_RAW), deepcopy(VESSEL_DATA_CLEAN))),
 )
 def test_clean_raw_vessel_data(vessel_data_raw, vessel_data_clean):
     assert vessel_data_clean == clean_raw_vessel_data(
@@ -98,9 +99,20 @@ def test_clean_raw_vessel_data(vessel_data_raw, vessel_data_clean):
     )
 
 
+@pytest.mark.parametrize(
+    "vessel_data_raw, vessel_items",
+    list(zip(deepcopy(VESSEL_DATA_RAW), deepcopy(VESSEL_ITEMS))),
+)
+def test_process_raw_vessel_data(vessel_data_raw, vessel_items):
+
+    assert vessel_items == process_raw_vessel_data(
+        vessel_data_raw, COLUMN_TYPE_MAPPINGS
+    )
+
+
 def test_create_vessel_item():
 
-    vessel_data = copy(VESSEL_DATA_CLEAN)[0]
+    vessel_data = deepcopy(VESSEL_DATA_CLEAN)[0]
 
     json_path = os.path.join(
         *[Path(__file__).parents[1], "resources", "vessel_item.json"]
