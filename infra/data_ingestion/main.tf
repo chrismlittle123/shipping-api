@@ -40,13 +40,4 @@ resource "aws_dynamodb_table" "shipping-data" {
     type = "S"
   }
 
-  attribute {
-    name = "updated_at"
-    type = "S"
-  }
-  attribute {
-    name = "imo_number"
-    type = "S"
-  }
-
 }
