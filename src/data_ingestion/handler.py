@@ -468,9 +468,6 @@ def main(event: dict) -> Union[List[dict], None]:
             vessel_item = create_vessel_item(vessel_data)
             vessel_list.append(vessel_item)
 
-        with open("inspection.json", "w") as file:
-            file.write(json.dumps(vessel_list))
-
         return vessel_list
     return None
 
