@@ -6,10 +6,12 @@ import re
 import urllib.parse
 from datetime import datetime
 from pathlib import Path
-from typing import Callable, List, Union
+from typing import Callable, List, Optional, Union
 
 import boto3
 from aws_lambda_powertools.utilities.typing import LambdaContext
+
+from src.data_ingestion.pydantic_models import VesselItem
 
 LOGGER = logging.getLogger()
 LOGGER.setLevel(logging.INFO)
@@ -28,14 +30,14 @@ def clean_column(column: str) -> str:
     return column.lower()
 
 
-def clean_numerical_data(value: Union[str, int, float]) -> Union[float, None]:
+def clean_numerical_data(value: Union[str, int, float]) -> Optional[float]:
     try:
         return round(float(value), 2)
     except (ValueError, TypeError):
         return None
 
 
-def convert_date(date_raw: str) -> Union[str, None]:
+def convert_date(date_raw: str) -> Optional[str]:
     try:
         date_object = datetime.strptime(date_raw, "%d/%m/%Y").date()
         date_string = datetime.strftime(date_object, "%Y-%m-%d")
@@ -44,13 +46,13 @@ def convert_date(date_raw: str) -> Union[str, None]:
         return None
 
 
-def clean_monitoring_methods(value: Union[str, None]) -> str:
+def clean_monitoring_methods(value: Optional[str]) -> str:
     if value == "" or value is None:
         return "No"
     return value.strip()
 
 
-def extract_technical_efficiency(technical_efficiency: str) -> Union[float, None]:
+def extract_technical_efficiency(technical_efficiency: str) -> Optional[float]:
     try:
         extracted_value = re.findall(r"\d*\.?\d+", technical_efficiency)[0]
         return round(float(extracted_value), 2)
@@ -84,6 +86,7 @@ def convert_csv_to_dictionaries(csv_content: List[list]) -> List[dict]:
 
 
 # TO DO: Create a pydantic model which is used to build the vessel item
+# TO DO: Write tests that test 5 vessels instead of just one
 # TO DO: Write a function which writes objects to DynamoDB
 # TO DO: Write unit tests
 # TO DO: Write integration test
@@ -448,7 +451,7 @@ def create_vessel_item(vessel_data: dict) -> dict:
     }
 
 
-def main(event: dict) -> Union[List[dict], None]:
+def main(event: dict) -> Optional[List[dict]]:
 
     csv_content = read_csv_from_s3(event)
     column_type_mappings = load_column_type_mappings()
@@ -456,13 +459,18 @@ def main(event: dict) -> Union[List[dict], None]:
     if csv_content:
         vessel_data_raw_dictionaries = convert_csv_to_dictionaries(csv_content)
 
-        vessel_list = []
-        for vessel_data_raw in vessel_data_raw_dictionaries:
-            vessel_data = clean_raw_vessel_data(vessel_data_raw, column_type_mappings)
-            vessel_item = create_vessel_item(vessel_data)
-            vessel_list.append(vessel_item)
+        vessel_item_object_list = []
 
-        return vessel_list
+        for vessel_data_raw in vessel_data_raw_dictionaries:
+
+            vessel_data = clean_raw_vessel_data(vessel_data_raw, column_type_mappings)
+
+            vessel_item = create_vessel_item(vessel_data)
+
+            vessel_item_object = VesselItem(**vessel_item)
+            vessel_item_object_list.append(vessel_item_object.json())
+
+        return vessel_item_object_list
     return None
 
 
@@ -470,5 +478,5 @@ def handler(event: dict, context: LambdaContext) -> dict:
     LOGGER.info({"message": "Incoming event", "content": json.dumps(event)})
     vessel_list = main(event)
     if vessel_list:
-        return {"body": json.dumps(vessel_list[:5])}
+        return {"body": vessel_list[:4]}
     return {"body": None}

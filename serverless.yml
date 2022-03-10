@@ -56,7 +56,6 @@ functions:
       include:
         - "src/data_ingestion/**"
         - "data/**"
-        - "src/shared/**"
         - "src/__init__.py"
     timeout: 30
     memorySize: 1024
