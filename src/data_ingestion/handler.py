@@ -1,9 +1,11 @@
 import csv
 import json
 import logging
+import os
 import re
 import urllib.parse
 from datetime import datetime
+from pathlib import Path
 from typing import Callable, List, Union
 
 import boto3
@@ -101,57 +103,35 @@ def apply_cleaning_function(
     return dictionary_input
 
 
-def clean_raw_vessel_data(vessel_data_raw: dict) -> dict:
+def load_column_type_mappings() -> dict:
 
-    columns = vessel_data_raw.keys()
-
-    string_columns = [
-        "imo_number",
-        "name",
-        "ship_type",
-        "reporting_period",
-        "technical_efficiency",
-        "port_of_registry",
-        "home_port",
-        "ice_class",
-        "doc_issue_date",
-        "doc_expiry_date",
-        "verifier_number",
-        "verifier_name",
-        "verifier_nab",
-        "verifier_address",
-        "verifier_city",
-        "verifier_accreditation_number",
-        "verifier_country",
-        "a",
-        "b",
-        "c",
-        "d",
+    path_list: List[str] = [
+        str(Path(__file__).parents[2]),
+        "data",
+        "config",
+        "column_type_mappings.json",
     ]
 
-    float_columns = [col for col in columns if col not in string_columns]
-    upper_case_columns = [
-        "name",
-        "port_of_registry",
-        "home_port",
-        "verifier_name",
-        "verifier_nab",
-        "verifier_address",
-        "verifier_city",
-        "verifier_country",
-    ]
-    date_columns = ["doc_issue_date", "doc_expiry_date"]
+    column_type_mappings_path = os.path.join(*path_list)
+
+    with open(column_type_mappings_path, "r") as file:
+        column_type_mappings = json.load(file)
+
+    return column_type_mappings
+
+
+def clean_raw_vessel_data(vessel_data_raw: dict, column_type_mappings: dict) -> dict:
 
     vessel_data_raw = apply_cleaning_function(
-        vessel_data_raw, float_columns, clean_numerical_data
+        vessel_data_raw, column_type_mappings["float_columns"], clean_numerical_data
     )
 
     vessel_data_raw = apply_cleaning_function(
-        vessel_data_raw, upper_case_columns, make_upper_case
+        vessel_data_raw, column_type_mappings["upper_case_columns"], make_upper_case
     )
 
     vessel_data_raw = apply_cleaning_function(
-        vessel_data_raw, date_columns, convert_date
+        vessel_data_raw, column_type_mappings["date_columns"], convert_date
     )
 
     vessel_data_raw = apply_cleaning_function(
@@ -163,7 +143,7 @@ def clean_raw_vessel_data(vessel_data_raw: dict) -> dict:
     )
 
     vessel_data_raw = apply_cleaning_function(
-        vessel_data_raw, list(columns), clean_null_values
+        vessel_data_raw, list(vessel_data_raw.keys()), clean_null_values
     )
 
     return vessel_data_raw
@@ -368,12 +348,14 @@ def create_vessel_item(vessel_data: dict) -> dict:
 def main(event: dict) -> Union[List[dict], None]:
 
     csv_content = read_csv_from_s3(event)
+    column_type_mappings = load_column_type_mappings()
+
     if csv_content:
         vessel_data_raw_dictionaries = convert_csv_to_dictionaries(csv_content)
 
         vessel_list = []
         for vessel_data_raw in vessel_data_raw_dictionaries:
-            vessel_data = clean_raw_vessel_data(vessel_data_raw)
+            vessel_data = clean_raw_vessel_data(vessel_data_raw, column_type_mappings)
             vessel_list.append(vessel_data)
 
         return vessel_list
@@ -383,4 +365,6 @@ def main(event: dict) -> Union[List[dict], None]:
 def handler(event: dict, context: LambdaContext) -> dict:
     LOGGER.info({"message": "Incoming event", "content": json.dumps(event)})
     vessel_list = main(event)
-    return {"body": json.dumps(vessel_list)}
+    if vessel_list:
+        return {"body": json.dumps(vessel_list[:10])}
+    return {"body": None}
