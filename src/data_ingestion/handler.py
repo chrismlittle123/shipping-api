@@ -86,8 +86,7 @@ def convert_csv_to_dictionaries(csv_content: List[list]) -> List[dict]:
 
 
 # TO DO: Create a pydantic model which is used to build the vessel item
-# TO DO: Write tests that test 5 vessels instead of just one
-# TO DO: Write a function which writes objects to DynamoDB
+# TO DO: Create a generator that writes VesselItem Object to dynamoDB
 # TO DO: Write unit tests
 # TO DO: Write integration test
 
@@ -451,6 +450,15 @@ def create_vessel_item(vessel_data: dict) -> dict:
     }
 
 
+def process_raw_vessel_data(vessel_data_raw: dict, column_type_mappings: dict) -> dict:
+
+    vessel_data = clean_raw_vessel_data(vessel_data_raw, column_type_mappings)
+    vessel_item = create_vessel_item(vessel_data)
+    vessel_item_object = VesselItem(**vessel_item)
+
+    return json.loads(vessel_item_object.json())
+
+
 def main(event: dict) -> Optional[List[dict]]:
 
     csv_content = read_csv_from_s3(event)
@@ -459,24 +467,23 @@ def main(event: dict) -> Optional[List[dict]]:
     if csv_content:
         vessel_data_raw_dictionaries = convert_csv_to_dictionaries(csv_content)
 
-        vessel_item_object_list = []
+        vessel_list = []
 
         for vessel_data_raw in vessel_data_raw_dictionaries:
 
-            vessel_data = clean_raw_vessel_data(vessel_data_raw, column_type_mappings)
+            vessel_item_object = process_raw_vessel_data(
+                vessel_data_raw, column_type_mappings
+            )
+            vessel_list.append(vessel_item_object)
 
-            vessel_item = create_vessel_item(vessel_data)
-
-            vessel_item_object = VesselItem(**vessel_item)
-            vessel_item_object_list.append(vessel_item_object.json())
-
-        return vessel_item_object_list
+        return vessel_list
     return None
 
 
 def handler(event: dict, context: LambdaContext) -> dict:
     LOGGER.info({"message": "Incoming event", "content": json.dumps(event)})
     vessel_list = main(event)
+
     if vessel_list:
-        return {"body": vessel_list[:4]}
+        return {"body": json.dumps(vessel_list[0])}
     return {"body": None}
