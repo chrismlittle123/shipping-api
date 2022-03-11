@@ -1,6 +1,3 @@
-locals {
-  service_name = "data-ingestion"
-}
 resource "aws_iam_role" "lambda_iam" {
   force_detach_policies = true
   name                  = "${var.project}-lambda-role"
