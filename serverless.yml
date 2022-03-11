@@ -57,6 +57,8 @@ functions:
         - "src/data_ingestion/**"
         - "data/**"
         - "src/__init__.py"
+    destinations:
+      onFailure: "${ssm:/master-stock/vehicle-acquisition/dead-letter-sqs-topic/arn}"
     timeout: 30
     memorySize: 1024
     layers:
