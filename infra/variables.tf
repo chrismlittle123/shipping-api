@@ -9,3 +9,7 @@ variable "aws_region" {
 variable "project" {
   type = string
 }
+
+variable "service_name" {
+  type = string
+}
