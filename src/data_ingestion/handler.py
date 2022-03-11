@@ -5,10 +5,10 @@ import urllib.parse
 from datetime import datetime
 from decimal import Decimal
 from typing import Generator, List, Optional, Union
-from xml.dom import ValidationErr
 
 import boto3
 from aws_lambda_powertools.utilities.typing import LambdaContext
+from pydantic import ValidationError
 
 from src.data_ingestion.data_processing import (
     clean_raw_vessel_data,
@@ -75,33 +75,46 @@ def write_item_to_dynamodb(item: dict) -> None:
 def process_raw_vessel_data(
     vessel_data_raw: dict, column_type_mappings: dict
 ) -> Optional[dict]:
-    reporting_period = vessel_data_raw["reporting_period"]
-    imo_number = vessel_data_raw["imo_number"]
     try:
-        vessel_data = clean_raw_vessel_data(vessel_data_raw, column_type_mappings)
-        vessel_item = create_vessel_item(vessel_data)
-        vessel_item_object = VesselItem(**vessel_item)
-        return json.loads(vessel_item_object.json())
-    except ValidationErr as error:
+        reporting_period = vessel_data_raw["reporting_period"]
+        imo_number = vessel_data_raw["imo_number"]
+        try:
+            vessel_data = clean_raw_vessel_data(vessel_data_raw, column_type_mappings)
+            vessel_item = create_vessel_item(vessel_data)
+            vessel_item_object = VesselItem(**vessel_item)
+            return json.loads(vessel_item_object.json())
+        except ValidationError as error:
+            LOGGER.warning(
+                {
+                    "message": f"Vessel data could not be processed for reporting period: {reporting_period} and IMO number: {imo_number}",
+                    "content": error,
+                }
+            )
+            return None
+    except KeyError as error:
         LOGGER.warning(
             {
-                "message": f"Vessel data could not be processed for reporting period: {reporting_period} and IMO number: {imo_number}",
+                "message": "Vessel data did not include reporting period or IMO number",
                 "content": error,
             }
         )
         return None
 
 
-# Create unhappy path test for process_raw_vessel_data
-# TO DO: Create generator that cleans vessel data and writes to dynamoDB - do this in such a way that if cleaning a single vessel item fails
-# the lambda returns a WARNING but keeps working. eg. try: .... except ValidationError as e: logger.WARNING(e)
 # TO DO: Write tests for writing to DynamoDB - ie. integration tests for write_item_to_dynamodb and read_csv_from_s3 functions
-# TO DO: Write happy path and unhappy path tests for test_handler
-# TO DO: Create GraphQL endpoint getVesselData
+# TO DO: Set up a Dead Letter Queue for this Lambda
+# TO DO: Add manual testing instructions to GitHub issue and link this PR
+# TO DO: Get serverless deploy to work in GitHub Actions, then set it to run based on git tags
+# TO DO: Create GraphQL endpoint getVesselData and a query which returns data based on reporting_year range
 # TO DO: Write end to end test - For example, one where I remove items from dynamoDB with certain IMO Numbers ("0000001", "0000002", "0000003", etc.)
 # then I upload a CSV file to a S3 file location called "raw/e2e", then wait for 5 seconds, then I make graphQL query requests for each one of these
 # vessels and check that the data matches.
-# Think about table versioning or backups
+# TO DO: Add docstrings to classes and functions where appropriate
+# TO DO: Use sphinx to generate documentation for the Lambda
+# TO DO: Add explanation of project including documentation for DynamoDB table in a separated Markdown file inside a docs folder. Put images of diagrams in data folder.
+# TO DO: Remember to send zip folder with code to Ahmad by Sunday evening
+# TO DO: Think about table versioning or backups
+# TO DO: Think about monitoring this API - how do I track metrics and ensure it's not breaking?
 
 
 def get_vessel_generator(

@@ -10,6 +10,7 @@ pydantic = "*"
 [dev-packages]
 ipykernel = "*"
 pytest = "*"
+pytest-mock = "*"
 mypy = "*"
 boto3 = "*"
 

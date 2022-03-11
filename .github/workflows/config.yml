@@ -4,9 +4,8 @@ name: Github Actions Pipeline
 
 on:
   push:
-    branches:
-      - main
-      - 'feature/**'
+    tags:
+      - "*dev-deploy-*"
 
 jobs:
   terraform:
