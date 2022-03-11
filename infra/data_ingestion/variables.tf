@@ -22,7 +22,7 @@ variable "fifo_queue" {
 variable "retention_time" {
   description = "Override retention time"
   type        = number
-  default     = 345600 # AWS default of 4 days
+  default     = 345600
 }
 
 
