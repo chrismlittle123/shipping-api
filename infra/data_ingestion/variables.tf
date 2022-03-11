@@ -19,11 +19,6 @@ variable "fifo_queue" {
   default = false
 }
 
-variable "content_based_deduplication" {
-  type    = bool
-  default = false
-}
-
 variable "retention_time" {
   description = "Override retention time"
   type        = number
