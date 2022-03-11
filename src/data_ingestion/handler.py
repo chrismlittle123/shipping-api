@@ -459,7 +459,7 @@ def write_item_to_dynamodb(item: dict) -> None:
     item["PK"] = "EU_MRV_EMISSIONS_DATA"
     item[
         "SK"
-    ] = f"IMO_NUMBER#{item['imo_number']}#REPORTING_PERIOD{item['reporting_period']}"
+    ] = f"REPORTING_PERIOD{item['reporting_period']}#IMO_NUMBER#{item['imo_number']}"
     item["updated_at"] = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
 
     dynamodb_table = "shipping-data"
