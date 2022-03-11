@@ -4,14 +4,15 @@ import logging
 import os
 import re
 import urllib.parse
-from collections import OrderedDict
 from datetime import datetime
 from decimal import Decimal
 from pathlib import Path
-from typing import Callable, List, Optional, Union
+from typing import Callable, Generator, List, Optional, Union
 
 import boto3
 from aws_lambda_powertools.utilities.typing import LambdaContext
+
+from src.data_ingestion.pydantic_models import VesselItem
 
 LOGGER = logging.getLogger()
 LOGGER.setLevel(logging.INFO)
@@ -451,273 +452,65 @@ def create_vessel_item(vessel_data: dict) -> dict:
     }
 
 
-def process_raw_vessel_data(vessel_data_raw: dict, column_type_mappings: dict) -> dict:
+def write_item_to_dynamodb(item: dict) -> None:
 
-    vessel_data = clean_raw_vessel_data(vessel_data_raw, column_type_mappings)
-    vessel_item = create_vessel_item(vessel_data)
-
-    return vessel_item
-
-
-def write_item_to_dynamodb() -> None:
-
-    item = {
-        "imo_number": "5383304",
-        "name": "ASTORIA",
-        "ship_type": "Passenger ship",
-        "reporting_period": 2018,
-        "technical_efficiency": None,
-        "port_of_registry": None,
-        "home_port": None,
-        "ice_class": None,
-        "doc_issue_date": "2019-02-05",
-        "doc_expiry_date": "2020-06-30",
-        "verifier_details": {
-            "verifier_number": None,
-            "verifier_name": "ICS VERIFICATION SERVICES SINGLE MEMBER P.C.",
-            "verifier_accreditation_body": "HELLENIC ACCREDITATION SYSTEM (ESYD)",
-            "verifier_address": "55 FILONOS STR.\n185 35 PIRAEUS, GREECE",
-            "verifier_city": "PIRAEUS",
-            "verifier_accreditation_number": "1101",
-            "verifier_country": "GREECE",
-        },
-        "monitoring_methods": {
-            "a": {
-                "value": "Yes",
-                "description": "BDN and period stock takes of fuel tanks",
-            },
-            "b": {"value": "No", "description": "Bunker fuel tank monitoring on-board"},
-            "c": {
-                "value": "No",
-                "description": "Flow meters for applicable combustion processes",
-            },
-            "d": {"value": "No", "description": "Direct CO2 emissions measurement"},
-        },
-        "fuel_consumption_metrics": {
-            "all_voyages": {
-                "total": {"value": 6307.75, "unit": "metric tonne"},
-                "annual_average": {
-                    "per_distance": {
-                        "value": 139.07,
-                        "unit": "kilogram / nautical mile",
-                    },
-                    "per_transport_work": {
-                        "mass": {
-                            "value": None,
-                            "unit": "gram / (metric tonne * nautical mile)",
-                        },
-                        "volume": {
-                            "value": None,
-                            "unit": "gram / (meter^3 * nautical mile)",
-                        },
-                        "deadweight_tonnage": {
-                            "value": None,
-                            "unit": "gram / (metric tonne * nautical mile)",
-                        },
-                        "passengers": {
-                            "value": 311.97,
-                            "unit": "gram / (metric tonne * nautical mile)",
-                        },
-                        "freight": {
-                            "value": None,
-                            "unit": "gram / (metric tonne * nautical mile)",
-                        },
-                    },
-                },
-            },
-            "laden_voyages": {
-                "total": {"value": None, "unit": "metric tonne"},
-                "per_distance": {"value": None, "unit": "kilogram / nautical mile"},
-                "per_transport_work": {
-                    "mass": {
-                        "value": None,
-                        "unit": "gram / (metric tonne * nautical mile)",
-                    },
-                    "volume": {
-                        "value": None,
-                        "unit": "gram / (meter^3 * nautical mile)",
-                    },
-                    "deadweight_tonnage": {
-                        "value": None,
-                        "unit": "gram / (metric tonne * nautical mile)",
-                    },
-                    "passengers": {
-                        "value": None,
-                        "unit": "gram / (metric tonne * nautical mile)",
-                    },
-                    "freight": {
-                        "value": None,
-                        "unit": "gram / (metric tonne * nautical mile)",
-                    },
-                },
-            },
-        },
-        "co2_emissions_metrics": {
-            "all_voyages": {
-                "total": {"value": 20080.25, "unit": "metric tonne"},
-                "between_ports": {
-                    "value": 16035.42,
-                    "unit": "metric tonne",
-                    "description": "CO2 emissions from all voyages between ports under a Member State jurisdiction",
-                },
-                "departed_from_ports": {
-                    "value": 728.59,
-                    "unit": "metric tonne",
-                    "description": "CO2 emissions from all voyages which departed from ports under a Member State jurisdiction",
-                },
-                "to_ports": {
-                    "value": 974.78,
-                    "unit": "metric tonne",
-                    "description": "CO2 emissions from all voyages to ports under a Member State jurisdiction",
-                },
-                "within_ports_at_berth": {
-                    "value": 2341.47,
-                    "unit": "metric tonne",
-                    "description": "CO2 emissions which occurred within ports under a Member State jurisdiction at berth",
-                },
-                "passenger_transport": {"value": None, "unit": "metric tonne"},
-                "freight_transport": {"value": None, "unit": "metric tonne"},
-                "annual_average": {
-                    "per_distance": {
-                        "value": 442.71,
-                        "unit": "kilogram / nautical mile",
-                    },
-                    "per_transport_work": {
-                        "mass": {
-                            "value": None,
-                            "unit": "gram / (metric tonne * nautical mile)",
-                        },
-                        "volume": {
-                            "value": None,
-                            "unit": "gram / (meter^3 * nautical mile)",
-                        },
-                        "deadweight_tonnage": {
-                            "value": None,
-                            "unit": "gram / (metric tonne * nautical mile)",
-                        },
-                        "passengers": {
-                            "value": 993.14,
-                            "unit": "gram / (metric tonne * nautical mile)",
-                        },
-                        "freight": {
-                            "value": None,
-                            "unit": "gram / (metric tonne * nautical mile)",
-                        },
-                    },
-                },
-            },
-            "laden_voyages": {
-                "total": {"value": None, "unit": "metric tonne"},
-                "per_distance": {"value": None, "unit": "kilogram / nautical mile"},
-                "per_transport_work": {
-                    "mass": {
-                        "value": None,
-                        "unit": "gram / (metric tonne * nautical mile)",
-                    },
-                    "volume": {
-                        "value": None,
-                        "unit": "gram / (meter^3 * nautical mile)",
-                    },
-                    "deadweight_tonnage": {
-                        "value": None,
-                        "unit": "gram / (metric tonne * nautical mile)",
-                    },
-                    "passengers": {
-                        "value": None,
-                        "unit": "gram / (metric tonne * nautical mile)",
-                    },
-                    "freight": {
-                        "value": None,
-                        "unit": "gram / (metric tonne * nautical mile)",
-                    },
-                },
-            },
-        },
-        "time_metrics": {
-            "annual_total_time_spent_at_sea": {"value": 4170.2, "unit": "hour"},
-            "total_time_spent_at_sea": {"value": 4170.2, "unit": "hour"},
-            "total_time_spent_at_sea_through_ice": {"value": None, "unit": "hour"},
-        },
-        "distance_metrics": {
-            "distance_travelled_through_ice": {"value": None, "unit": "nautical mile"}
-        },
-        "density_metrics": {
-            "average_cargo_density": {"value": None, "unit": "metric tonne / meter^3"}
-        },
-        "additional_information": None,
-    }
     item = json.loads(json.dumps(item), parse_float=Decimal)
 
     item["PK"] = "EU_MRV_EMISSIONS_DATA"
     item["SK"] = f"IMO_NUMBER#{item['imo_number']}"
     item["updated_at"] = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
 
-    final_columns = [
-        "PK",
-        "SK",
-        "updated_at",
-        "imo_number",
-        "name",
-        "ship_type",
-        "reporting_period",
-        "technical_efficiency",
-        "port_of_registry",
-        "home_port",
-        "ice_class",
-        "doc_issue_date",
-        "doc_expiry_date",
-        "verifier_details",
-        "monitoring_methods",
-        "monitoring_methods",
-        "fuel_consumption_metrics",
-        "co2_emissions_metrics",
-        "time_metrics",
-        "distance_metrics",
-        "density_metrics",
-        "additional_information",
-    ]
-
-    data_dict = OrderedDict()
-
-    for k in final_columns:
-        data_dict[k] = item[k]
-
     dynamodb_table = "shipping-data"
 
     dynamodb = boto3.resource("dynamodb")
 
     table = dynamodb.Table(dynamodb_table)
-    response = table.put_item(Item=data_dict)
+    response = table.put_item(Item=item)
     return response
 
 
-def main(event: dict) -> Optional[List[dict]]:
+def process_raw_vessel_data(vessel_data_raw: dict, column_type_mappings: dict) -> dict:
+
+    vessel_data = clean_raw_vessel_data(vessel_data_raw, column_type_mappings)
+    vessel_item = create_vessel_item(vessel_data)
+    vessel_item_object = VesselItem(**vessel_item)
+
+    return json.loads(vessel_item_object.json())
+
+
+# TO DO: Create generator that cleans vessel data and writes to dynamoDB - do this in such a way that if cleaning a single vessel item fails
+# the lambda returns a WARNING but keeps working. eg. try: .... except ValidationError as e: logger.WARNING(e)
+# TO DO: Write happy path and unhappy path tests for test_handler
+# TO DO: Create GraphQL endpoint getVesselData
+# TO DO: Write end to end test - For example, one where I remove items from dynamoDB with certain IMO Numbers ("0000001", "0000002", "0000003", etc.)
+# then I upload a CSV file to a S3 file location called "raw/e2e", then wait for 5 seconds, then I make graphQL query requests for each one of these
+# vessels and check that the data matches.
+
+
+def get_vessel_generator(event: dict) -> Optional[Generator[dict, None, None]]:
 
     csv_content = read_csv_from_s3(event)
     column_type_mappings = load_column_type_mappings()
 
     if csv_content:
-        vessel_data_raw_dictionaries = convert_csv_to_dictionaries(csv_content)
+        vessel_data_raw_dictionaries = convert_csv_to_dictionaries(csv_content)[:5]
 
-        vessel_list = []
-        for vessel_data_raw in vessel_data_raw_dictionaries[:5]:
+        vessel_generator = (
+            process_raw_vessel_data(vessel_data_raw, column_type_mappings)
+            for vessel_data_raw in vessel_data_raw_dictionaries
+        )
 
-            vessel_item = process_raw_vessel_data(vessel_data_raw, column_type_mappings)
-            vessel_list.append(vessel_item)
-
-        return vessel_list
-
+        return vessel_generator
     return None
 
 
 def handler(event: dict, context: LambdaContext) -> dict:
-    LOGGER.info({"message": "Incoming event", "content": json.dumps(event)})
-    vessel_list = main(event)
+    LOGGER.info({"message": "Incoming S3 event", "content": json.dumps(event)})
 
-    write_item_to_dynamodb()
+    vessel_generator = get_vessel_generator(event)
+    if vessel_generator:
+        for vessel_item in vessel_generator:
+            write_item_to_dynamodb(vessel_item)
 
-    # TO DO: Create a generator which processes vehicle data and writes to DynamoDB
-
-    if vessel_list:
-        return {"body": json.dumps(vessel_list[0])}
-    return {"body": None}
+        return {"body": "Success!"}
+    return {"body": "Unsuccesful"}

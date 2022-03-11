@@ -1,12 +1,22 @@
-from copy import copy
+from copy import deepcopy
 from datetime import date
+
+import pytest
+from pydantic import ValidationError
 
 from src.data_ingestion.pydantic_models import Boolean, Unit, VesselItem
 from tests.resources.vessel_data import VESSEL_ITEMS
 
 
-def test_vessel_item():
-    vessel_item = copy(VESSEL_ITEMS)[0]
+def test_vessel_item_unhappy_path():
+    vessel_item = deepcopy(VESSEL_ITEMS[0])
+    vessel_item["imo_number"] = "12345678"
+    with pytest.raises(ValidationError):
+        VesselItem(**vessel_item)
+
+
+def test_vessel_item_happy_path():
+    vessel_item = deepcopy(VESSEL_ITEMS[0])
     vessel_item_object = VesselItem(**vessel_item)
     assert vessel_item_object.dict() == {
         "imo_number": "5383304",
@@ -48,228 +58,97 @@ def test_vessel_item():
         },
         "fuel_consumption_metrics": {
             "all_voyages": {
-                "total": {
-                    "amount": None,
-                    "unit": Unit.metric_tonne,
-                    "description": None,
-                },
+                "total": {"value": 6307.75, "unit": Unit.metric_tonne},
                 "annual_average": {
-                    "per_distance": {
-                        "amount": None,
-                        "unit": Unit.emissions_distance,
-                        "description": None,
-                    },
+                    "per_distance": {"value": 139.07, "unit": Unit.emissions_distance},
                     "per_transport_work": {
-                        "mass": {
-                            "amount": None,
-                            "unit": Unit.emissions_mass,
-                            "description": None,
-                        },
-                        "volume": {
-                            "amount": None,
-                            "unit": Unit.emissions_volume,
-                            "description": None,
-                        },
+                        "mass": {"value": None, "unit": Unit.emissions_mass},
+                        "volume": {"value": None, "unit": Unit.emissions_volume},
                         "deadweight_tonnage": {
-                            "amount": None,
+                            "value": None,
                             "unit": Unit.emissions_mass,
-                            "description": None,
                         },
-                        "passengers": {
-                            "amount": None,
-                            "unit": Unit.emissions_mass,
-                            "description": None,
-                        },
-                        "freight": {
-                            "amount": None,
-                            "unit": Unit.emissions_mass,
-                            "description": None,
-                        },
+                        "passengers": {"value": 311.97, "unit": Unit.emissions_mass},
+                        "freight": {"value": None, "unit": Unit.emissions_mass},
                     },
                 },
             },
             "laden_voyages": {
-                "total": {
-                    "amount": None,
-                    "unit": Unit.metric_tonne,
-                    "description": None,
-                },
-                "per_distance": {
-                    "amount": None,
-                    "unit": Unit.emissions_distance,
-                    "description": None,
-                },
+                "total": {"value": None, "unit": Unit.metric_tonne},
+                "per_distance": {"value": None, "unit": Unit.emissions_distance},
                 "per_transport_work": {
-                    "mass": {
-                        "amount": None,
-                        "unit": Unit.emissions_mass,
-                        "description": None,
-                    },
-                    "volume": {
-                        "amount": None,
-                        "unit": Unit.emissions_volume,
-                        "description": None,
-                    },
-                    "deadweight_tonnage": {
-                        "amount": None,
-                        "unit": Unit.emissions_mass,
-                        "description": None,
-                    },
-                    "passengers": {
-                        "amount": None,
-                        "unit": Unit.emissions_mass,
-                        "description": None,
-                    },
-                    "freight": {
-                        "amount": None,
-                        "unit": Unit.emissions_mass,
-                        "description": None,
-                    },
+                    "mass": {"value": None, "unit": Unit.emissions_mass},
+                    "volume": {"value": None, "unit": Unit.emissions_volume},
+                    "deadweight_tonnage": {"value": None, "unit": Unit.emissions_mass},
+                    "passengers": {"value": None, "unit": Unit.emissions_mass},
+                    "freight": {"value": None, "unit": Unit.emissions_mass},
                 },
             },
         },
         "co2_emissions_metrics": {
             "all_voyages": {
-                "total": {
-                    "amount": None,
-                    "unit": Unit.metric_tonne,
-                    "description": None,
-                },
+                "total": {"value": 20080.25, "unit": Unit.metric_tonne},
                 "between_ports": {
-                    "amount": None,
+                    "value": 16035.42,
                     "unit": Unit.metric_tonne,
                     "description": "CO2 emissions from all voyages between ports under a Member State jurisdiction",
                 },
                 "departed_from_ports": {
-                    "amount": None,
+                    "value": 728.59,
                     "unit": Unit.metric_tonne,
                     "description": "CO2 emissions from all voyages which departed from ports under a Member State jurisdiction",
                 },
                 "to_ports": {
-                    "amount": None,
+                    "value": 974.78,
                     "unit": Unit.metric_tonne,
                     "description": "CO2 emissions from all voyages to ports under a Member State jurisdiction",
                 },
                 "within_ports_at_berth": {
-                    "amount": None,
+                    "value": 2341.47,
                     "unit": Unit.metric_tonne,
                     "description": "CO2 emissions which occurred within ports under a Member State jurisdiction at berth",
                 },
-                "passenger_transport": {
-                    "amount": None,
-                    "unit": Unit.metric_tonne,
-                    "description": None,
-                },
-                "freight_transport": {
-                    "amount": None,
-                    "unit": Unit.metric_tonne,
-                    "description": None,
-                },
+                "passenger_transport": {"value": None, "unit": Unit.metric_tonne},
+                "freight_transport": {"value": None, "unit": Unit.metric_tonne},
                 "annual_average": {
-                    "per_distance": {
-                        "amount": None,
-                        "unit": Unit.emissions_distance,
-                        "description": None,
-                    },
+                    "per_distance": {"value": 442.71, "unit": Unit.emissions_distance},
                     "per_transport_work": {
-                        "mass": {
-                            "amount": None,
-                            "unit": Unit.emissions_mass,
-                            "description": None,
-                        },
-                        "volume": {
-                            "amount": None,
-                            "unit": Unit.emissions_volume,
-                            "description": None,
-                        },
+                        "mass": {"value": None, "unit": Unit.emissions_mass},
+                        "volume": {"value": None, "unit": Unit.emissions_volume},
                         "deadweight_tonnage": {
-                            "amount": None,
+                            "value": None,
                             "unit": Unit.emissions_mass,
-                            "description": None,
                         },
-                        "passengers": {
-                            "amount": None,
-                            "unit": Unit.emissions_mass,
-                            "description": None,
-                        },
-                        "freight": {
-                            "amount": None,
-                            "unit": Unit.emissions_mass,
-                            "description": None,
-                        },
+                        "passengers": {"value": 993.14, "unit": Unit.emissions_mass},
+                        "freight": {"value": None, "unit": Unit.emissions_mass},
                     },
                 },
             },
             "laden_voyages": {
-                "total": {
-                    "amount": None,
-                    "unit": Unit.metric_tonne,
-                    "description": None,
-                },
-                "per_distance": {
-                    "amount": None,
-                    "unit": Unit.emissions_distance,
-                    "description": None,
-                },
+                "total": {"value": None, "unit": Unit.metric_tonne},
+                "per_distance": {"value": None, "unit": Unit.emissions_distance},
                 "per_transport_work": {
-                    "mass": {
-                        "amount": None,
-                        "unit": Unit.emissions_mass,
-                        "description": None,
-                    },
-                    "volume": {
-                        "amount": None,
-                        "unit": Unit.emissions_volume,
-                        "description": None,
-                    },
-                    "deadweight_tonnage": {
-                        "amount": None,
-                        "unit": Unit.emissions_mass,
-                        "description": None,
-                    },
-                    "passengers": {
-                        "amount": None,
-                        "unit": Unit.emissions_mass,
-                        "description": None,
-                    },
-                    "freight": {
-                        "amount": None,
-                        "unit": Unit.emissions_mass,
-                        "description": None,
-                    },
+                    "mass": {"value": None, "unit": Unit.emissions_mass},
+                    "volume": {"value": None, "unit": Unit.emissions_volume},
+                    "deadweight_tonnage": {"value": None, "unit": Unit.emissions_mass},
+                    "passengers": {"value": None, "unit": Unit.emissions_mass},
+                    "freight": {"value": None, "unit": Unit.emissions_mass},
                 },
             },
         },
         "time_metrics": {
-            "annual_total_time_spent_at_sea": {
-                "amount": None,
-                "unit": Unit.hour,
-                "description": None,
-            },
-            "total_time_spent_at_sea": {
-                "amount": None,
-                "unit": Unit.hour,
-                "description": None,
-            },
-            "total_time_spent_at_sea_through_ice": {
-                "amount": None,
-                "unit": Unit.hour,
-                "description": None,
-            },
+            "annual_total_time_spent_at_sea": {"value": 4170.2, "unit": Unit.hour},
+            "total_time_spent_at_sea": {"value": 4170.2, "unit": Unit.hour},
+            "total_time_spent_at_sea_through_ice": {"value": None, "unit": Unit.hour},
         },
         "distance_metrics": {
             "distance_travelled_through_ice": {
-                "amount": None,
+                "value": None,
                 "unit": Unit.nautical_mile,
-                "description": None,
             }
         },
         "density_metrics": {
-            "average_cargo_density": {
-                "amount": None,
-                "unit": Unit.density,
-                "description": None,
-            }
+            "average_cargo_density": {"value": None, "unit": Unit.density}
         },
         "additional_information": None,
     }

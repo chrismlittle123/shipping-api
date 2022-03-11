@@ -1,6 +1,6 @@
 import json
 import os
-from copy import copy, deepcopy
+from copy import deepcopy
 from pathlib import Path
 
 import pytest
@@ -112,7 +112,7 @@ def test_process_raw_vessel_data(vessel_data_raw, vessel_items):
 
 def test_create_vessel_item():
 
-    vessel_data = copy(VESSEL_DATA_CLEAN)[0]
+    vessel_data = deepcopy(VESSEL_DATA_CLEAN[0])
 
     json_path = os.path.join(
         *[Path(__file__).parents[2], "resources", "vessel_item.json"]

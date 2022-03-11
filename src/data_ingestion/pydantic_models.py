@@ -27,9 +27,14 @@ class Method(BaseModel):
 
 
 class Metric(BaseModel):
-    amount: Optional[float]
+    value: Optional[float]
     unit: Unit
-    description: Optional[str]
+
+
+class MetricWithDescription(BaseModel):
+    value: Optional[float]
+    unit: Unit
+    description: str
 
 
 class MonitoringMethods(BaseModel):
@@ -75,10 +80,10 @@ class FuelConsumptionLadenVoyages(BaseModel):
 
 class Co2EmissionsAllVoyages(BaseModel):
     total: Metric
-    between_ports: Metric
-    departed_from_ports: Metric
-    to_ports: Metric
-    within_ports_at_berth: Metric
+    between_ports: MetricWithDescription
+    departed_from_ports: MetricWithDescription
+    to_ports: MetricWithDescription
+    within_ports_at_berth: MetricWithDescription
     passenger_transport: Metric
     freight_transport: Metric
     annual_average: AnnualAverage
