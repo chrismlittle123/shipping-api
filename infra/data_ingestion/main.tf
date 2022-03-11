@@ -44,9 +44,10 @@ resource "aws_sns_topic" "dead_letter_topic" {
 }
 
 resource "aws_sqs_queue" "dead_letter_queue" {
-  name                      = "${var.service_name}_dead_letter_queue"
-  fifo_queue                = var.fifo_queue
-  message_retention_seconds = var.retention_time
+  name                          = "${var.service_name}_dead_letter_queue"
+  output_arn_ssm_parameter_name = "/${var.project}/${var.service_name}/dead-letter-sqs-topic/arn"
+  fifo_queue                    = var.fifo_queue
+  message_retention_seconds     = var.retention_time
 }
 
 resource "aws_sns_topic_subscription" "channel_to_queue" {
