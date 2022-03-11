@@ -457,7 +457,9 @@ def write_item_to_dynamodb(item: dict) -> None:
     item = json.loads(json.dumps(item), parse_float=Decimal)
 
     item["PK"] = "EU_MRV_EMISSIONS_DATA"
-    item["SK"] = f"IMO_NUMBER#{item['imo_number']}"
+    item[
+        "SK"
+    ] = f"IMO_NUMBER#{item['imo_number']}#REPORTING_PERIOD{item['reporting_period']}"
     item["updated_at"] = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
 
     dynamodb_table = "shipping-data"
@@ -494,7 +496,6 @@ def get_vessel_generator(event: dict) -> Optional[Generator[dict, None, None]]:
 
     if csv_content:
         vessel_data_raw_dictionaries = convert_csv_to_dictionaries(csv_content)[:5]
-
         vessel_generator = (
             process_raw_vessel_data(vessel_data_raw, column_type_mappings)
             for vessel_data_raw in vessel_data_raw_dictionaries
