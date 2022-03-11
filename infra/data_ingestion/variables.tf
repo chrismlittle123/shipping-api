@@ -6,11 +6,10 @@ variable "aws_region" {
   type = string
 }
 
-variable "service_name" {
+variable "project" {
   type = string
 }
-
-variable "project" {
+variable "service_name" {
   type = string
 }
 
@@ -23,9 +22,4 @@ variable "retention_time" {
   description = "Override retention time"
   type        = number
   default     = 345600
-}
-
-
-locals {
-  service_name = "data-ingestion"
 }
