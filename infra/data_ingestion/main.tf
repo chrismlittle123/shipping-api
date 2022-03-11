@@ -2,11 +2,11 @@ resource "aws_iam_role" "lambda_iam" {
   force_detach_policies = true
   name                  = "${var.project}-lambda-role"
   assume_role_policy    = data.aws_iam_policy_document.assume_role_lambda.json
-  path                  = "/${var.project}/${local.service_name}/"
+  path                  = "/${var.project}/${var.service_name}/"
 }
 
 resource "aws_iam_policy" "inline_policy" {
-  name   = "${var.project}-${local.service_name}-policy"
+  name   = "${var.project}-${var.service_name}-policy"
   policy = data.aws_iam_policy_document.lambda_policy.json
 }
 
@@ -40,12 +40,12 @@ resource "aws_dynamodb_table" "shipping-data" {
 }
 
 resource "aws_sns_topic" "dead_letter_topic" {
-  name = "${local.service_name}_dead_letter_topic"
+  name = "${var.service_name}_dead_letter_topic"
 }
 
 resource "aws_sqs_queue" "dead_letter_queue" {
-  name                          = "${local.service_name}_dead_letter_queue"
-  output_arn_ssm_parameter_name = "/${var.project}/${local.service_name}/dead-letter-sqs-topic/arn"
+  name                          = "${var.service_name}_dead_letter_queue"
+  output_arn_ssm_parameter_name = "/${var.project}/${var.service_name}/dead-letter-sqs-topic/arn"
   fifo_queue                    = var.fifo_queue
   message_retention_seconds     = var.retention_time
 }
