@@ -1,8 +1,12 @@
+data "local_file" "schema" {
+  filename = "${path.module}/schema.graphql"
+}
 resource "aws_appsync_graphql_api" "appsync" {
   name                = "shipping-api"
-  schema              = file("schema.graphql")
+  schema              = data.local_file.schema.filename
   authentication_type = "API_KEY"
 }
+
 
 resource "aws_appsync_api_key" "appsync_api_key" {
   api_id = "public-key"
