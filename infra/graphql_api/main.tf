@@ -3,10 +3,9 @@ data "local_file" "schema" {
 }
 resource "aws_appsync_graphql_api" "appsync" {
   name                = "shipping-api"
-  schema              = data.local_file.schema.filename
+  schema              = data.local_file.schema.content
   authentication_type = "API_KEY"
 }
-
 
 resource "aws_appsync_api_key" "appsync_api_key" {
   api_id = "public-key"
