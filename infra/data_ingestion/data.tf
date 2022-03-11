@@ -68,7 +68,7 @@ data "aws_iam_policy_document" "lambda_policy" {
       "sqs:*"
     ]
     resources = [
-      "*"
+      "arn:aws:sqs:${var.aws_region}:${var.aws_account_id}:${var.service_name}_dead_letter_queue"
     ]
   }
 }
