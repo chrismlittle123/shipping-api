@@ -1,0 +1,63 @@
+enum DistanceUnit {
+  miles
+  kilometers
+}
+
+enum Market {
+  gb
+  de
+  fr
+}
+
+enum CurrencyCode {
+  EUR
+  GBP
+}
+
+type MarketPrices {
+  id: ID!
+  vin: String!
+  prices: [Price]!
+}
+
+input OdometerDistance {
+  value: Int!
+  unit: DistanceUnit!
+}
+
+type Price {
+  centAmount: Int!
+  currencyCode: CurrencyCode!
+  market: Market!
+  daysToSale: Int
+  meta: AWSJSON
+}
+
+type Promotion {
+  isPromotion: Boolean!
+  centAmount: Int!
+  currencyCode: String!
+  expiryDate: AWSDate
+}
+
+type Query {
+  getMarketPrices(
+    vin: String!
+    firstRegistration: AWSDate!
+    sourceMarket: Market!
+    targetMarkets: [Market!]!
+    odometerDistance: OdometerDistance!
+  ): MarketPrices
+  getCurrentRetailPrices(vin: String!, inventoryUuid: String): RetailPrice!
+}
+
+type RetailPrice {
+  retail_price: AWSJSON
+  markets: [Market!]!
+  depreciationMultiplier: Float!
+  promotion: Promotion
+}
+
+schema {
+  query: Query
+}
