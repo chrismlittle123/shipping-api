@@ -102,7 +102,6 @@ def process_raw_vessel_data(
 
 
 # TO DO: Write tests for writing to DynamoDB - ie. integration tests for write_item_to_dynamodb and read_csv_from_s3 functions
-# TO DO: Set up a Dead Letter Queue for this Lambda
 # TO DO: Get serverless deploy to work in GitHub Actions
 # TO DO: Add manual testing instructions to GitHub issue and link this PR
 # TO DO: Create GraphQL endpoint getVesselData and a query which returns data based on reporting_year range

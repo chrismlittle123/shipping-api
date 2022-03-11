@@ -46,8 +46,6 @@ functions:
           rules:
             - prefix: raw/
             - suffix: .csv
-    environment:
-      S3_BUCKET: ${self:project}-${self:aws_account_id}
     package:
       patterns:
         - "!node_modules/**"
