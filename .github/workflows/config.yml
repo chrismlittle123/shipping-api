@@ -4,8 +4,6 @@ name: Github Actions Pipeline
 
 on:
   push:
-    branches:
-      - "**"
     tags:
       - "**dev-deploy-*"
 

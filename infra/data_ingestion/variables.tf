@@ -6,11 +6,11 @@ variable "aws_region" {
   type = string
 }
 
-variable "project" {
+variable "service_name" {
   type = string
 }
 
-variable "service_name" {
+variable "project" {
   type = string
 }
 
