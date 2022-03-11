@@ -16,10 +16,17 @@ provider "aws" {
   region  = "eu-west-2"
 }
 
-module "data-ingestion" {
+module "data_ingestion" {
   aws_account_id = var.aws_account_id
   aws_region     = var.aws_region
   project        = var.project
   service_name   = "data-ingestion"
   source         = "./data_ingestion"
+}
+
+module "graphql_api" {
+  aws_account_id = var.aws_account_id
+  aws_region     = var.aws_region
+  project        = var.project
+  source         = "./graphql_api"
 }
