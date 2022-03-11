@@ -101,16 +101,15 @@ def process_raw_vessel_data(
         return None
 
 
-# TO DO: Write tests for writing to DynamoDB - ie. integration tests for write_item_to_dynamodb and read_csv_from_s3 functions
-# TO DO: Get serverless deploy to work in GitHub Actions
-# TO DO: Add manual testing instructions to GitHub issue and link this PR
 # TO DO: Create GraphQL endpoint getVesselData and a query which returns data based on reporting_year range
+# TO DO: Write tests for writing to DynamoDB - ie. integration tests for write_item_to_dynamodb and read_csv_from_s3 functions
 # TO DO: Write end to end test - For example, one where I remove items from dynamoDB with certain IMO Numbers ("0000001", "0000002", "0000003", etc.)
 # then I upload a CSV file to a S3 file location called "raw/e2e", then wait for 5 seconds, then I make graphQL query requests for each one of these
 # vessels and check that the data matches.
 # TO DO: Add docstrings to classes and functions where appropriate
 # TO DO: Use sphinx to generate documentation for the Lambda
 # TO DO: Add explanation of project including documentation for DynamoDB table in a separated Markdown file inside a docs folder. Put images of diagrams in data folder.
+# TO DO: Get serverless deploy to work in GitHub Actions
 # TO DO: Remember to send zip folder with code to Ahmad by Sunday evening
 # TO DO: Think about table versioning or backups
 # TO DO: Think about monitoring this API - how do I track metrics and ensure it's not breaking?

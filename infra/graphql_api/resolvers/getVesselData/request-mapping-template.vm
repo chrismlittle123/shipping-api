@@ -1,0 +1,15 @@
+#set($partition_key = "CONFIG#file_details" )
+#set($sort_key = "CHANNEL#${ctx.args.channel}#VENDOR#${ctx.args.vendor}#MARKET#${ctx.args.market}")
+
+#set($ctx.args["config_name"] = "file_details")
+#set($ctx.args["updated_date"] = $util.time.nowFormatted("yyyy-MM-dd HH:mm"))
+
+{
+    "version" : "2017-02-28",
+    "operation" : "PutItem",
+    "key" : {
+        "PK" : $util.dynamodb.toDynamoDBJson($partition_key),
+        "SK" : $util.dynamodb.toDynamoDBJson($sort_key)
+    },
+    "attributeValues" : $util.dynamodb.toMapValuesJson($ctx.args)
+}
