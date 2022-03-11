@@ -27,6 +27,5 @@ module "data_ingestion" {
 module "graphql_api" {
   aws_account_id = var.aws_account_id
   aws_region     = var.aws_region
-  project        = var.project
   source         = "./graphql_api"
 }
