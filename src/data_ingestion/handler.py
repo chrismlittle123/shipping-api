@@ -459,7 +459,7 @@ def write_item_to_dynamodb(item: dict) -> None:
     item["PK"] = "EU_MRV_EMISSIONS_DATA"
     item[
         "SK"
-    ] = f"REPORTING_PERIOD{item['reporting_period']}#IMO_NUMBER#{item['imo_number']}"
+    ] = f"REPORTING_PERIOD#{item['reporting_period']}#IMO_NUMBER#{item['imo_number']}"
     item["updated_at"] = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
 
     dynamodb_table = "shipping-data"
@@ -487,6 +487,7 @@ def process_raw_vessel_data(vessel_data_raw: dict, column_type_mappings: dict) -
 # TO DO: Write end to end test - For example, one where I remove items from dynamoDB with certain IMO Numbers ("0000001", "0000002", "0000003", etc.)
 # then I upload a CSV file to a S3 file location called "raw/e2e", then wait for 5 seconds, then I make graphQL query requests for each one of these
 # vessels and check that the data matches.
+# Think about table versioning or backups
 
 
 def get_vessel_generator(event: dict) -> Optional[Generator[dict, None, None]]:
