@@ -24,3 +24,8 @@ variable "retention_time" {
   type        = number
   default     = 345600 # AWS default of 4 days
 }
+
+
+locals {
+  service_name = "data-ingestion"
+}
