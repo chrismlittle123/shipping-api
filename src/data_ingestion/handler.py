@@ -123,7 +123,7 @@ def get_vessel_generator(
     column_type_mappings = load_column_type_mappings()
 
     if csv_content:
-        vessel_data_raw_dictionaries = convert_csv_to_dictionaries(csv_content)[:5]
+        vessel_data_raw_dictionaries = convert_csv_to_dictionaries(csv_content)
         vessel_generator = (
             process_raw_vessel_data(vessel_data_raw, column_type_mappings)
             for vessel_data_raw in vessel_data_raw_dictionaries
