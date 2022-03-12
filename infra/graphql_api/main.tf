@@ -50,6 +50,8 @@ data "local_file" "get_vessel_data_response_mapping" {
   filename = "${path.module}/resolvers/getVesselData/response-mapping-template.vm"
 }
 
+# Data source
+
 resource "aws_appsync_datasource" "shipping_data" {
   api_id           = aws_appsync_api_key.appsync_api_key.api_id
   name             = "shipping_data"
@@ -61,11 +63,18 @@ resource "aws_appsync_datasource" "shipping_data" {
   }
 }
 
-# Function
+# Functions
 resource "aws_appsync_function" "getVesselData_function" {
   api_id                    = aws_appsync_api_key.appsync_api_key.api_id
   data_source               = aws_appsync_datasource.shipping_data.name
   name                      = "getVesselData_function"
   request_mapping_template  = data.local_file.get_vessel_data_request_mapping.content
   response_mapping_template = data.local_file.get_vessel_data_response_mapping.content
+}
+
+data "template_file" "getVesselData_before_mapping" {
+  template = file("${path.module}/resolvers/all-resolvers-before-mapping-template.vm.tpl")
+  vars = {
+    section_name = "getVesselData"
+  }
 }
