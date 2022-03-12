@@ -1,14 +1,13 @@
-service: lambda-template
+service: shipping-api
 # Variable names must be the same as in env.tfvars file
 aws_account_id: 495700631743
-project: lambda-template
-
-
-variablesResolutionMode: 20210326
+aws_region: eu-west-2
+project: shipping-api
 
 package:
   individually: true
   exclude:
+    - "*"
     - "*/**"
 
 provider:
@@ -16,10 +15,8 @@ provider:
   stage: dev
   runtime: python3.9
   region: eu-west-2
-  timeout: 30
-  memorySize: 1024
-  lambdaHashingVersion: 20201221
   deploymentPrefix: serverless-lambdas
+
 
 
 custom:
@@ -28,14 +25,27 @@ custom:
     zip: true
     slim: true
     layer: true
+    useDownloadCache: true
+    useStaticCache: true
 
 plugins:
   - serverless-python-requirements
 functions:
-  sample-lambda:
-    description: "AWS Lambda template"
-    role: ${ssm:/${self:project}/sample-lambda/lambda-iam-role/arn}
-    handler: src.sample_lambda.handler.handler
+  data-ingestion:
+    description: "Lambda that ingests and cleans raw shipping data"
+    role: ${ssm:/${self:project}/data-ingestion/lambda-iam-role/arn}
+    layers:
+      - { Ref: PythonRequirementsLambdaLayer }
+    handler: src.data_ingestion.handler.handler
+    events:
+      - s3:
+          bucket: ${self:project}-${self:aws_account_id}
+          event: s3:ObjectCreated:*
+          rules:
+            - prefix: raw/
+            - suffix: .csv
+    environment:
+      S3_BUCKET: ${self:project}-${self:aws_account_id}
     package:
       patterns:
         - "!node_modules/**"
@@ -43,10 +53,10 @@ functions:
         - "!package-lock.json"
         - "!package.json"
       include:
-        - "src/sample_lambda/**"
-        - "src/shared/**"
+        - "src/data_ingestion/**"
+        - "data/**"
         - "src/__init__.py"
+    destinations:
+      onFailure: arn:aws:sqs:${self:aws_region}:${self:aws_account_id}:data-ingestion_dead_letter_queue
     timeout: 30
     memorySize: 1024
-    layers:
-      - { Ref: PythonRequirementsLambdaLayer }

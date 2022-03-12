@@ -16,9 +16,10 @@ provider "aws" {
   region  = "eu-west-2"
 }
 
-module "sample-lambda" {
+module "data_ingestion" {
   aws_account_id = var.aws_account_id
   aws_region     = var.aws_region
   project        = var.project
-  source         = "./sample_lambda"
+  service_name   = "data-ingestion"
+  source         = "./data_ingestion"
 }
