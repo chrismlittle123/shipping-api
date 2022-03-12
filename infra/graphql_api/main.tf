@@ -20,7 +20,7 @@ data "local_file" "get_vessel_data_response_mapping" {
 }
 
 resource "aws_iam_role" "shipping_datasource_role" {
-  name               = "shipping_datasource_role"
+  name               = "shipping_datasource_role_dev"
   assume_role_policy = data.aws_iam_policy_document.shipping_data_datasource_policy.json
 }
 
