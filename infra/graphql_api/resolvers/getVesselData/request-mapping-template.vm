@@ -18,10 +18,10 @@
     "filter": {
         "expression": "#imo_number = :imo_number",
         "expressionNames" : {
-            "#market" : "market"
+            "#imo_number" : "imo_number"
         },
         "expressionValues" : {
-            ":market" : $util.dynamodb.toDynamoDBJson(${ctx.args.imo_number})
+            ":imo_number" : $util.dynamodb.toDynamoDBJson(${ctx.args.imo_number})
         }
     }
     #end
