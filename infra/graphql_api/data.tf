@@ -6,7 +6,7 @@ data "aws_iam_policy_document" "shipping_api_access_policy" {
       "appsync:GraphQL"
     ]
     resources = [
-    "arn:aws:appsync:${var.aws_region}:${var.aws_account_id}:apis/${aws_appsync_graphql_api.purchasing_api.id}/*"]
+    "arn:aws:appsync:${var.aws_region}:${var.aws_account_id}:apis/${aws_appsync_graphql_api.appsync.id}/*"]
   }
 }
 
