@@ -65,13 +65,6 @@ functions:
     layers:
       - { Ref: PythonRequirementsLambdaLayer }
     handler: src.rest_api.handler.handler
-    events:
-      - s3:
-          bucket: ${self:project}-${self:aws_account_id}
-          event: s3:ObjectCreated:*
-          rules:
-            - prefix: raw/
-            - suffix: .csv
     package:
       patterns:
         - "!node_modules/**"
