@@ -1,28 +1,10 @@
 #set($partition_key = "EU_MRV_EMISSIONS_DATA" )
-
+#set($sort_key = "REPORTING_PERIOD#${ctx.args.reporting_period}#IMO_NUMBER#${ctx.args.imo_number}")
 {
     "version" : "2017-02-28",
-    "operation" : "Query",
-    "limit": 200,
-    "select" : "ALL_ATTRIBUTES",
-    "query" : {
-        "expression": "#PK = :pk",
-        "expressionNames" : {
-            "#PK" : "PK"
-        },
-        "expressionValues" : {
-            ":pk": $util.dynamodb.toDynamoDBJson($partition_key)
-        }
-    },
-    #if ( !$util.isNull( $ctx.args.imo_number))
-    "filter": {
-        "expression": "#imo_number = :imo_number",
-        "expressionNames" : {
-            "#imo_number" : "imo_number"
-        },
-        "expressionValues" : {
-            ":imo_number" : $util.dynamodb.toDynamoDBJson(${ctx.args.imo_number})
-        }
+    "operation" : "GetItem",
+    "key" : {
+        "PK" : $util.dynamodb.toDynamoDBJson($partition_key),
+        "SK" : $util.dynamodb.toDynamoDBJson($sort_key)
     }
-    #end
 }
