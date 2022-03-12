@@ -4,12 +4,10 @@ aws_account_id: 495700631743
 aws_region: eu-west-2
 project: shipping-api
 
-
-variablesResolutionMode: 20210326
-
 package:
   individually: true
   exclude:
+    - "*"
     - "*/**"
 
 provider:
@@ -17,10 +15,8 @@ provider:
   stage: dev
   runtime: python3.9
   region: eu-west-2
-  timeout: 30
-  memorySize: 1024
-  lambdaHashingVersion: 20201221
   deploymentPrefix: serverless-lambdas
+
 
 
 custom:
@@ -38,6 +34,8 @@ functions:
   data-ingestion:
     description: "Lambda that ingests and cleans raw shipping data"
     role: ${ssm:/${self:project}/data-ingestion/lambda-iam-role/arn}
+    layers:
+      - { Ref: PythonRequirementsLambdaLayer }
     handler: src.data_ingestion.handler.handler
     events:
       - s3:
@@ -62,5 +60,3 @@ functions:
       onFailure: arn:aws:sqs:${self:aws_region}:${self:aws_account_id}:data-ingestion_dead_letter_queue
     timeout: 30
     memorySize: 1024
-    layers:
-      - { Ref: PythonRequirementsLambdaLayer }
