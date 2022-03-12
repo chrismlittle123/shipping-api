@@ -35,7 +35,7 @@ jobs:
       - name: Terraform Plan
         id: plan
         if: github.event_name == 'push'
-        run: terraform plan -no-color -var-file env.tfvars
+        run: terraform plan -no-color -var-file env.tfvars -destroy
         continue-on-error: false
 
       - name: Terraform Apply
