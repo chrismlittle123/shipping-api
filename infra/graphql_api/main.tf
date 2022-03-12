@@ -2,12 +2,22 @@ data "local_file" "schema" {
   filename = "${path.module}/schema.graphql"
 }
 
-# Logging IAM role
+# IAM roles
+
+resource "aws_iam_role" "shipping_datasource_role" {
+  name               = "shipping_datasource_role_dev"
+  assume_role_policy = data.aws_iam_policy_document.shipping_data_datasource_policy_assume_role.json
+}
+
+resource "aws_iam_role_policy" "shipping_api_datasource_role_policy" {
+  name   = "shipping_api_datasource_policy"
+  policy = data.aws_iam_policy_document.shipping_data_datasource_policy.json
+  role   = aws_iam_role.shipping_datasource_role.id
+}
 resource "aws_iam_role" "logging_role" {
   name               = "purchasing_api_logging_role"
   assume_role_policy = data.aws_iam_policy_document.shipping_api_logging_policy_assume_role.json
 }
-
 resource "aws_iam_role_policy_attachment" "purchasing_api_logging_policy" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSAppSyncPushToCloudWatchLogs"
   role       = aws_iam_role.logging_role.name
@@ -38,13 +48,6 @@ data "local_file" "get_vessel_data_request_mapping" {
 
 data "local_file" "get_vessel_data_response_mapping" {
   filename = "${path.module}/resolvers/getVesselData/response-mapping-template.vm"
-}
-
-# Datasource
-
-resource "aws_iam_role" "shipping_datasource_role" {
-  name               = "shipping_datasource_role_dev"
-  assume_role_policy = data.aws_iam_policy_document.shipping_data_datasource_policy_assume_role.json
 }
 
 resource "aws_appsync_datasource" "shipping_data" {
