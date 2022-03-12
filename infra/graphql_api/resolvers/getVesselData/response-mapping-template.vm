@@ -1,3 +1,0 @@
-## Pass back the result from DynamoDB. **
-$util.error("GetVesselData Response Mapping", $util.toJson($ctx))
-## $util.toJson($ctx)
