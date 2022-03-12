@@ -44,8 +44,6 @@ functions:
           rules:
             - prefix: raw/
             - suffix: .csv
-    environment:
-      S3_BUCKET: ${self:project}-${self:aws_account_id}
     package:
       patterns:
         - "!node_modules/**"
@@ -58,5 +56,32 @@ functions:
         - "src/__init__.py"
     destinations:
       onFailure: arn:aws:sqs:${self:aws_region}:${self:aws_account_id}:data-ingestion_dead_letter_queue
+    timeout: 30
+    memorySize: 1024
+
+  rest-api:
+    description: "Lambda that returns REST API responses"
+    role: ${ssm:/${self:project}/rest-api/lambda-iam-role/arn}
+    layers:
+      - { Ref: PythonRequirementsLambdaLayer }
+    handler: src.rest_api.handler.handler
+    events:
+      - s3:
+          bucket: ${self:project}-${self:aws_account_id}
+          event: s3:ObjectCreated:*
+          rules:
+            - prefix: raw/
+            - suffix: .csv
+    package:
+      patterns:
+        - "!node_modules/**"
+        - "!yarn.lock"
+        - "!package-lock.json"
+        - "!package.json"
+      include:
+        - "src/rest_api/**"
+        - "src/__init__.py"
+    destinations:
+      onFailure: arn:aws:sqs:${self:aws_region}:${self:aws_account_id}:rest-api_dead_letter_queue
     timeout: 30
     memorySize: 1024
