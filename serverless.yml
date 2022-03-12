@@ -57,7 +57,7 @@ functions:
         - "data/**"
         - "src/__init__.py"
     destinations:
-      onFailure: "arn:aws:sqs:${self:aws_region}:${self:aws_account_id}:data-ingestion_dead_letter_queue"
+      onFailure: arn:aws:sqs:${self:aws_region}:${self:aws_account_id}:data-ingestion_dead_letter_queue
     timeout: 30
     memorySize: 1024
     layers:
