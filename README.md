@@ -35,6 +35,6 @@ Where `lambda_name` is the name of the lambda in the serverless.yml file.
 
 # Deploy Serverless
 
-Run the following comman:
+Run the following command:
 
 `pipenv run serverless deploy`
