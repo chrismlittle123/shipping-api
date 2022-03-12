@@ -1,5 +1,5 @@
 type VesselItem {
-  reporting_period: Int
+  reporting_period: String
   imo_number: String
   name: String
 }
