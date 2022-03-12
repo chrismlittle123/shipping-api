@@ -37,6 +37,12 @@ resource "aws_dynamodb_table" "shipping-data" {
     type = "S"
   }
 
+  global_secondary_index {
+    name            = "IMONumber-GSI"
+    hash_key        = "imo_number"
+    projection_type = "ALL"
+  }
+
 }
 
 resource "aws_sns_topic" "dead_letter_topic" {
