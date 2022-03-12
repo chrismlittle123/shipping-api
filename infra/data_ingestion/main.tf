@@ -37,6 +37,11 @@ resource "aws_dynamodb_table" "shipping-data" {
     type = "S"
   }
 
+  attribute {
+    name = "imo_number"
+    type = "S"
+  }
+
   global_secondary_index {
     name            = "IMONumber-GSI"
     hash_key        = "imo_number"
