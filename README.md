@@ -2,7 +2,7 @@
 
 An API which lets you access the EU-MRV public CO2 emission report: https://mrv.emsa.europa.eu/#public/emission-report
 
-# Requirements
+## Requirements
 
 - Python 3.9
 - Pipenv. Run `brew install pipenv` or `pip3 install pipenv`
@@ -25,7 +25,7 @@ Run tests:
 
 - `yarn test`
 
-# Invoke Lambda Locally
+## Invoke Lambda Locally
 
 Ensure you are logged into the AWS CLI and run:
 
@@ -33,7 +33,7 @@ Ensure you are logged into the AWS CLI and run:
 
 Where `lambda_name` is the name of the lambda in the serverless.yml file.
 
-# Deploy Serverless
+## Deploy Serverless
 
 Run the following command:
 
