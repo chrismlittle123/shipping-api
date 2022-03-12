@@ -42,7 +42,7 @@ resource "aws_appsync_function" "getVesselData_function" {
   response_mapping_template = data.local_file.get_vessel_data_response_mapping.content
 }
 
-#create logging IAM role
+# Logging IAM role
 resource "aws_iam_role" "logging_role" {
   name               = "purchasing_api_logging_role"
   assume_role_policy = data.aws_iam_policy_document.shipping_api_logging_policy_assume_role.json

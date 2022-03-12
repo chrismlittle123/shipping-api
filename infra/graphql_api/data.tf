@@ -39,3 +39,17 @@ data "aws_iam_policy_document" "shipping_data_datasource_policy_assume_role" {
     }
   }
 }
+
+data "aws_iam_policy_document" "shipping_api_logging_policy_assume_role" {
+  statement {
+    effect = "Allow"
+    actions = [
+    "sts:AssumeRole", ]
+
+    principals {
+      identifiers = [
+      "appsync.amazonaws.com"]
+      type = "Service"
+    }
+  }
+}
