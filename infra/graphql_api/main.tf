@@ -8,7 +8,7 @@ resource "aws_appsync_graphql_api" "appsync" {
 }
 
 resource "aws_appsync_api_key" "appsync_api_key" {
-  api_id = "public-key"
+  api_id = aws_appsync_graphql_api.appsync.id
 }
 
 data "local_file" "get_vessel_data_request_mapping" {
