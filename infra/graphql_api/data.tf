@@ -23,4 +23,16 @@ data "aws_iam_policy_document" "shipping_data_datasource_policy" {
       "arn:aws:dynamodb:${var.aws_region}:${var.aws_account_id}:table/shipping-data",
     ]
   }
+
+  statement {
+    effect = "Allow"
+    actions = [
+    "sts:AssumeRole"]
+
+    principals {
+      identifiers = [
+      "appsync.amazonaws.com"]
+      type = "Service"
+    }
+  }
 }
