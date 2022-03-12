@@ -18,41 +18,41 @@ provider "aws" {
 
 
 # Shared resources
-# resource "aws_s3_bucket" "shipping_api_bucket" {
-#   bucket = "${var.project}-${var.aws_account_id}"
-# }
+resource "aws_s3_bucket" "shipping_api_bucket" {
+  bucket = "${var.project}-${var.aws_account_id}"
+}
 
-# resource "aws_dynamodb_table" "shipping-data" {
-#   name           = "shipping-data"
-#   read_capacity  = 20
-#   write_capacity = 20
-#   hash_key       = "PK"
-#   range_key      = "SK"
+resource "aws_dynamodb_table" "shipping-data" {
+  name           = "shipping-data"
+  read_capacity  = 20
+  write_capacity = 20
+  hash_key       = "PK"
+  range_key      = "SK"
 
-#   attribute {
-#     name = "PK"
-#     type = "S"
-#   }
+  attribute {
+    name = "PK"
+    type = "S"
+  }
 
-#   attribute {
-#     name = "SK"
-#     type = "S"
-#   }
+  attribute {
+    name = "SK"
+    type = "S"
+  }
 
-#   attribute {
-#     name = "imo_number"
-#     type = "S"
-#   }
+  attribute {
+    name = "imo_number"
+    type = "S"
+  }
 
-#   global_secondary_index {
-#     name            = "IMONumber-GSI"
-#     hash_key        = "imo_number"
-#     projection_type = "ALL"
-#     write_capacity  = 10
-#     read_capacity   = 10
-#   }
+  global_secondary_index {
+    name            = "IMONumber-GSI"
+    hash_key        = "imo_number"
+    projection_type = "ALL"
+    write_capacity  = 10
+    read_capacity   = 10
+  }
 
-# }
+}
 
 
 # Lambda functions
