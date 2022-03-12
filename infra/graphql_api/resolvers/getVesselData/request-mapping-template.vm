@@ -1,15 +1,28 @@
-#set($partition_key = "CONFIG#file_details" )
-#set($sort_key = "CHANNEL#${ctx.args.channel}#VENDOR#${ctx.args.vendor}#MARKET#${ctx.args.market}")
-
-#set($ctx.args["config_name"] = "file_details")
-#set($ctx.args["updated_date"] = $util.time.nowFormatted("yyyy-MM-dd HH:mm"))
+#set($partition_key = "EU_MRV_EMISSIONS_DATA" )
 
 {
     "version" : "2017-02-28",
-    "operation" : "PutItem",
-    "key" : {
-        "PK" : $util.dynamodb.toDynamoDBJson($partition_key),
-        "SK" : $util.dynamodb.toDynamoDBJson($sort_key)
+    "operation" : "Query",
+    "limit": 200,
+    "select" : "ALL_ATTRIBUTES",
+    "query" : {
+        "expression": "#PK = :pk",
+        "expressionNames" : {
+            "#PK" : "PK"
+        },
+        "expressionValues" : {
+            ":pk": $util.dynamodb.toDynamoDBJson($partition_key)
+        }
     },
-    "attributeValues" : $util.dynamodb.toMapValuesJson($ctx.args)
+    #if ( !$util.isNull( $ctx.args.imo_number))
+    "filter": {
+        "expression": "#imo_number = :imo_number",
+        "expressionNames" : {
+            "#market" : "market"
+        },
+        "expressionValues" : {
+            ":market" : $util.dynamodb.toDynamoDBJson(${ctx.args.imo_number})
+        }
+    }
+    #end
 }
