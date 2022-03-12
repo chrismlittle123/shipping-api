@@ -41,3 +41,14 @@ resource "aws_appsync_function" "getVesselData_function" {
   request_mapping_template  = data.local_file.get_vessel_data_request_mapping.content
   response_mapping_template = data.local_file.get_vessel_data_response_mapping.content
 }
+
+#create logging IAM role
+resource "aws_iam_role" "logging_role" {
+  name               = "purchasing_api_logging_role"
+  assume_role_policy = data.aws_iam_policy_document.shipping_api_logging_policy_assume_role.json
+}
+
+resource "aws_iam_role_policy_attachment" "purchasing_api_logging_policy" {
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSAppSyncPushToCloudWatchLogs"
+  role       = aws_iam_role.logging_role.name
+}

@@ -5,7 +5,7 @@ type VesselItem {
 }
 
 type Query {
-  getVesselData(reporting_period: Int, imo_number: String): VesselItem
+  getVesselData(reporting_period: String, imo_number: String): VesselItem
 }
 
 schema {
