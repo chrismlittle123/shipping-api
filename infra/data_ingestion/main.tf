@@ -46,6 +46,8 @@ resource "aws_dynamodb_table" "shipping-data" {
     name            = "IMONumber-GSI"
     hash_key        = "imo_number"
     projection_type = "ALL"
+    write_capacity  = 10
+    read_capacity   = 10
   }
 
 }
