@@ -39,10 +39,11 @@ resource "aws_api_gateway_method" "rest_api_method" {
 }
 
 resource "aws_api_gateway_integration" "integration" {
-  rest_api_id = aws_api_gateway_rest_api.rest_api_name.id
-  resource_id = aws_api_gateway_resource.rest_api_resource.id
-  http_method = aws_api_gateway_method.rest_api_method.http_method
-  type        = "MOCK"
+  rest_api_id             = aws_api_gateway_rest_api.rest_api_name.id
+  resource_id             = aws_api_gateway_resource.rest_api_resource.id
+  http_method             = aws_api_gateway_method.rest_api_method.http_method
+  integration_http_method = "POST"
+  type                    = "LAMBDA_PROXY"
 }
 
 resource "aws_api_gateway_deployment" "rest_api_deployment" {
