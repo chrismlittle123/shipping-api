@@ -1,3 +1,5 @@
+# IAM Roles
+
 resource "aws_iam_role" "lambda_iam" {
   force_detach_policies = true
   name                  = "${var.service_name}-lambda-role"
@@ -16,7 +18,7 @@ resource "aws_iam_role_policy_attachment" "lambda_iam_to_policy_attachment" {
 }
 
 
-
+# Dead Letter Queues
 resource "aws_sns_topic" "dead_letter_topic" {
   name = "${var.service_name}_dead_letter_topic"
 }
