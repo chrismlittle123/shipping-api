@@ -66,6 +66,8 @@ functions:
     layers:
       - { Ref: PythonRequirementsLambdaLayer }
     handler: src.rest_api.handler.handler
+    events:
+      - http: GET handler
     package:
       patterns:
         - "!node_modules/**"
