@@ -11,7 +11,7 @@ def handler(event: dict, context: LambdaContext) -> dict:
 
     LOGGER.info({"message": "Incoming API Gateway event", "content": json.dumps(event)})
     # 1. Parse out query string params
-    transactionId = event["queryStringParameters"]["transactionId"]
+    transactionId = event["query"]["transactionId"]
 
     # 2. Construct the body of the response object
     transactionResponse = dict()
