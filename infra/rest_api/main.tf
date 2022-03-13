@@ -71,7 +71,6 @@ resource "aws_api_gateway_method_settings" "rest_api_settings" {
 
   settings {
     metrics_enabled = true
-    logging_level   = "INFO"
   }
 }
 
