@@ -109,7 +109,6 @@ def process_raw_vessel_data(
 # vessels and check that the data matches.
 # TO DO: Add docstrings to classes and functions where appropriate
 # TO DO: Add explanation of project including documentation for DynamoDB table in a separated Markdown file inside a docs folder. Put images of diagrams in data folder.
-# TO DO: Get serverless deploy to work in GitHub Actions (Not necessary)
 # TO DO: Remember to send zip folder with code to Ahmad by Sunday evening
 # TO DO: Think about table versioning or backups
 # TO DO: Think about monitoring this API - how do I track metrics and ensure it's not breaking?

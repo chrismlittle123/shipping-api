@@ -6,14 +6,10 @@ from aws_lambda_powertools.utilities.typing import LambdaContext
 def handler(event: dict, context: LambdaContext) -> dict:
     # 1. Parse out query string params
     transactionId = event["queryStringParameters"]["transactionId"]
-    transactionType = event["queryStringParameters"]["type"]
-    transactionAmount = event["queryStringParameters"]["amount"]
 
     # 2. Construct the body of the response object
     transactionResponse = dict()
     transactionResponse["transactionId"] = transactionId
-    transactionResponse["type"] = transactionType
-    transactionResponse["amount"] = transactionAmount
     transactionResponse["message"] = "Hello from Lambda land"
 
     # 3. Construct http response object
