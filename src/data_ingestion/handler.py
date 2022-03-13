@@ -57,6 +57,15 @@ def write_item_to_dynamodb(item: dict) -> None:
 def process_raw_vessel_data(
     vessel_data_raw: dict, column_type_mappings: dict
 ) -> Optional[dict]:
+    """Process vessel data from raw form to clean nested and modelled dictionary
+
+    Args:
+        vessel_data_raw (dict): Raw vessel data as a flat dictionary
+        column_type_mappings (dict): Mappings of column names to data types
+
+    Returns:
+        Optional[dict]: Cleaned, nested dictioniary with vessel data
+    """
     try:
         reporting_period = vessel_data_raw["reporting_period"]
         imo_number = vessel_data_raw["imo_number"]
@@ -83,19 +92,18 @@ def process_raw_vessel_data(
         return None
 
 
-# TO DO: Write end to end test - For example, one where I remove items from dynamoDB with certain IMO Numbers ("0000001", "0000002", "0000003", etc.)
-# then I upload a CSV file to a S3 file location called "raw/e2e", then wait for 5 seconds, then I make query requests for each one of these
-# vessels and check that the data matches.
-# TO DO: Add docstrings to classes and functions where appropriate
-# TO DO: Add explanation of project including documentation for DynamoDB table in a separated Markdown file inside a docs folder. Put images of diagrams in data folder.
-# TO DO: Remember to send zip folder with code to Ahmad by Sunday evening
-# TO DO: Think about table versioning or backups
-# TO DO: Think about monitoring this API - how do I track metrics and ensure it's not breaking?
-
-
 def get_vessel_generator(
     event: dict,
 ) -> Optional[Generator[Optional[dict], None, None]]:
+    """Create a vessel generator which generates clean vessel items
+
+    Args:
+        event (dict): S3 event
+
+    Returns:
+        Optional[Generator[Optional[dict], None, None]]: Generator that
+        yields clean vessel items
+    """
 
     csv_content = read_csv_from_s3(event)
     column_type_mappings = load_column_type_mappings()

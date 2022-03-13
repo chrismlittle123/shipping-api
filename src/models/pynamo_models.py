@@ -41,6 +41,10 @@ class ShippingData(Model):
 
 
 class VesselItemModel(ShippingData):
+    """
+    Pynamo model which writes and reads from shipping-data DynamoDB table
+    """
+
     def convert_to_dictionary(self) -> dict:
 
         model_dictionary = self.attribute_values
