@@ -74,7 +74,7 @@ class VesselItemModel(ShippingData):
             obj = cls(
                 pk="EU_MRV_EMISSIONS_DATA",
                 sk=f"REPORTING_PERIOD#{item['reporting_period']}#IMO_NUMBER#{item['imo_number']}",
-                updated_date=datetime.utcnow().strftime("%Y-%m-%d %H:%M"),
+                updated_date=datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S"),
                 **item,
             )
             obj.save()

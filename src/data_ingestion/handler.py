@@ -83,9 +83,8 @@ def process_raw_vessel_data(
         return None
 
 
-# TO DO: Write tests for writing to DynamoDB - ie. integration tests for write_item_to_dynamodb and read_csv_from_s3 functions
 # TO DO: Write end to end test - For example, one where I remove items from dynamoDB with certain IMO Numbers ("0000001", "0000002", "0000003", etc.)
-# then I upload a CSV file to a S3 file location called "raw/e2e", then wait for 5 seconds, then I make graphQL query requests for each one of these
+# then I upload a CSV file to a S3 file location called "raw/e2e", then wait for 5 seconds, then I make query requests for each one of these
 # vessels and check that the data matches.
 # TO DO: Add docstrings to classes and functions where appropriate
 # TO DO: Add explanation of project including documentation for DynamoDB table in a separated Markdown file inside a docs folder. Put images of diagrams in data folder.
