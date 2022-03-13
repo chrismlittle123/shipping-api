@@ -4,6 +4,7 @@ from datetime import datetime
 from typing import Union
 
 from pynamodb.attributes import MapAttribute, NumberAttribute, UnicodeAttribute
+from pynamodb.exceptions import PutError
 from pynamodb.models import Model
 
 from src.pydantic_models import VesselItem
@@ -65,17 +66,16 @@ class VesselItemModel(ShippingData):
             return None
 
     @classmethod
-    def write_vessel_item(cls, item: VesselItem) -> Union[VesselItem, None]:
+    def write_vessel_item(cls, item: dict) -> Union[dict, None]:
         try:
-            item_dictionary = json.loads(item.json())
-
             obj = cls(
                 pk="EU_MRV_EMISSIONS_DATA",
-                sk=f"REPORTING_PERIOD#{item.reporting_period}#IMO_NUMBER#{item.imo_number}",
+                sk=f"REPORTING_PERIOD#{item['reporting_period']}#IMO_NUMBER#{item['imo_number']}",
                 updated_date=datetime.utcnow().strftime("%Y-%m-%d %H:%M"),
-                **item_dictionary,
+                **item,
             )
             obj.save()
-            return obj
-        except TypeError:
+
+            return obj.convert_to_dictionary()
+        except PutError:
             return None

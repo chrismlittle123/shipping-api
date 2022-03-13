@@ -24,8 +24,8 @@ resource "aws_s3_bucket" "shipping_api_bucket" {
 
 resource "aws_dynamodb_table" "shipping-data" {
   name           = "shipping-data"
-  read_capacity  = 20
-  write_capacity = 20
+  read_capacity  = 200
+  write_capacity = 200
   hash_key       = "PK"
   range_key      = "SK"
 
@@ -53,16 +53,16 @@ resource "aws_dynamodb_table" "shipping-data" {
     name            = "IMONumber-GSI"
     hash_key        = "imo_number"
     projection_type = "ALL"
-    write_capacity  = 10
-    read_capacity   = 10
+    write_capacity  = 200
+    read_capacity   = 200
   }
 
   global_secondary_index {
     name            = "Name-GSI"
     hash_key        = "name"
     projection_type = "ALL"
-    write_capacity  = 10
-    read_capacity   = 10
+    write_capacity  = 200
+    read_capacity   = 200
   }
 
 }
