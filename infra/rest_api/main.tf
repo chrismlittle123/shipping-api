@@ -48,6 +48,14 @@ resource "aws_api_gateway_integration" "integration" {
 resource "aws_api_gateway_deployment" "rest_api_deployment" {
   rest_api_id = aws_api_gateway_rest_api.rest_api_name.id
 
+  triggers = {
+    redeployment = sha1(jsonencode(aws_api_gateway_rest_api.example.body))
+  }
+
+  lifecycle {
+    create_before_destroy = true
+  }
+
 }
 
 resource "aws_api_gateway_stage" "rest_api_stage" {
