@@ -49,22 +49,6 @@ resource "aws_dynamodb_table" "shipping-data" {
     type = "S"
   }
 
-  global_secondary_index {
-    name            = "IMONumber-GSI"
-    hash_key        = "imo_number"
-    projection_type = "ALL"
-    write_capacity  = 200
-    read_capacity   = 200
-  }
-
-  global_secondary_index {
-    name            = "Name-GSI"
-    hash_key        = "name"
-    projection_type = "ALL"
-    write_capacity  = 200
-    read_capacity   = 200
-  }
-
 }
 
 

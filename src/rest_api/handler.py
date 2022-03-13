@@ -14,8 +14,8 @@ def handler(event: dict, context: LambdaContext) -> dict:
 
     LOGGER.info({"message": "Incoming API Gateway event", "content": json.dumps(event)})
 
-    reporting_period = str(event["query"]["reporting_period"])
-    imo_number = event["query"]["imo_number"]
+    reporting_period = str(event["query"].get("reporting_period", ""))
+    imo_number = event["query"].get("imo_number", "")
 
     vessel_item = VesselItemModel.read_vessel_item(reporting_period, imo_number)
 
