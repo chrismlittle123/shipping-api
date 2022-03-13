@@ -45,6 +45,28 @@ resource "aws_api_gateway_integration" "integration" {
   type        = "MOCK"
 }
 
+resource "aws_api_gateway_deployment" "rest_api_deployment" {
+  rest_api_id = aws_api_gateway_rest_api.rest_api_name.id
+
+}
+
+resource "aws_api_gateway_stage" "rest_api_stage" {
+  rest_api_id   = aws_api_gateway_rest_api.rest_api_name.id
+  deployment_id = aws_api_gateway_deployment.rest_api_deployment.id
+  stage_name    = "dev"
+}
+
+resource "aws_api_gateway_method_settings" "rest_api_settings" {
+  rest_api_id = aws_api_gateway_rest_api.rest_api_name.id
+  stage_name  = aws_api_gateway_stage.rest_api_stage.stage_name
+  method_path = "*/*"
+
+  settings {
+    metrics_enabled = true
+    logging_level   = "INFO"
+  }
+}
+
 # Lambda Permission
 
 resource "aws_lambda_permission" "api_gateway" {
