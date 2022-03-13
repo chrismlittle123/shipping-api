@@ -1,9 +1,15 @@
 import json
+import logging
 
 from aws_lambda_powertools.utilities.typing import LambdaContext
 
+LOGGER = logging.getLogger()
+LOGGER.setLevel(logging.INFO)
+
 
 def handler(event: dict, context: LambdaContext) -> dict:
+
+    LOGGER.info({"message": "Incoming API Gateway event", "content": json.dumps(event)})
     # 1. Parse out query string params
     transactionId = event["queryStringParameters"]["transactionId"]
 
