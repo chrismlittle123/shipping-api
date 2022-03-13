@@ -39,11 +39,23 @@ resource "aws_api_gateway_method" "rest_api_method" {
 }
 
 resource "aws_api_gateway_integration" "integration" {
-  rest_api_id             = aws_api_gateway_rest_api.rest_api_name.id
-  resource_id             = aws_api_gateway_resource.rest_api_resource.id
-  http_method             = aws_api_gateway_method.rest_api_method.http_method
-  integration_http_method = "POST"
-  type                    = "AWS_PROXY"
+  rest_api_id = aws_api_gateway_rest_api.rest_api_name.id
+  resource_id = aws_api_gateway_resource.rest_api_resource.id
+  http_method = aws_api_gateway_method.rest_api_method.http_method
+  type        = "MOCK"
+}
+
+# Lambda Permission
+
+resource "aws_lambda_permission" "api_gateway" {
+  statement_id  = "AllowAPIGatewayInvoke"
+  action        = "lambda:InvokeFunction"
+  function_name = "${var.project}-dev-${var.service_name}"
+  principal     = "apigateway.amazonaws.com"
+
+  # The /*/* portion grants access from any method on any resource
+  # within the API Gateway "REST API".
+  source_arn = "${aws_api_gateway_rest_api.rest_api_name.execution_arn}/*/*"
 }
 
 # Dead Letter Queues
