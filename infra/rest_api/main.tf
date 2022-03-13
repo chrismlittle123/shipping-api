@@ -53,7 +53,7 @@ resource "aws_api_gateway_deployment" "rest_api_deployment" {
 resource "aws_api_gateway_stage" "rest_api_stage" {
   rest_api_id   = aws_api_gateway_rest_api.rest_api_name.id
   deployment_id = aws_api_gateway_deployment.rest_api_deployment.id
-  stage_name    = "dev"
+  stage_name    = var.stage_name
 }
 
 resource "aws_api_gateway_method_settings" "rest_api_settings" {
@@ -72,7 +72,7 @@ resource "aws_api_gateway_method_settings" "rest_api_settings" {
 resource "aws_lambda_permission" "api_gateway" {
   statement_id  = "AllowAPIGatewayInvoke"
   action        = "lambda:InvokeFunction"
-  function_name = "${var.project}-dev-${var.service_name}"
+  function_name = "${var.project}-${var.stage_name}-${var.service_name}"
   principal     = "apigateway.amazonaws.com"
 
   # The /*/* portion grants access from any method on any resource
