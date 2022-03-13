@@ -73,6 +73,7 @@ module "data_ingestion" {
   aws_account_id = var.aws_account_id
   aws_region     = var.aws_region
   project        = var.project
+  stage_name     = var.stage_name
   service_name   = "data-ingestion"
   source         = "./data_ingestion"
 }
@@ -81,6 +82,7 @@ module "rest_api" {
   aws_account_id = var.aws_account_id
   aws_region     = var.aws_region
   project        = var.project
+  stage_name     = var.stage_name
   service_name   = "rest-api"
   source         = "./rest_api"
 }
