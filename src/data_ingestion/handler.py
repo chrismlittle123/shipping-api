@@ -101,8 +101,8 @@ def process_raw_vessel_data(
         return None
 
 
-# TO DO: Delete all resources created by this project. Then do terraform apply with a brand new terraform lock. It's basically a test to see if this code is transferable to another AWS account.
 # TO DO: Create API endpoints - get all data, get data based on year, get data based on imo number, get data based on name
+# TO DO: Create the necessary pynamo read access patterns for this API endpoint
 # TO DO: Write tests for writing to DynamoDB - ie. integration tests for write_item_to_dynamodb and read_csv_from_s3 functions
 # TO DO: Write end to end test - For example, one where I remove items from dynamoDB with certain IMO Numbers ("0000001", "0000002", "0000003", etc.)
 # then I upload a CSV file to a S3 file location called "raw/e2e", then wait for 5 seconds, then I make graphQL query requests for each one of these
