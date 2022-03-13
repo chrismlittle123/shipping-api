@@ -15,15 +15,15 @@ def handler(event: dict, context: LambdaContext) -> dict:
     transactionId = event["query"]["transactionId"]
 
     # 2. Construct the body of the response object
-    transactionResponse: Dict[Any, Any] = dict()
-    transactionResponse["transactionId"] = transactionId
-    transactionResponse["message"] = "Hello from Lambda land"
+
+    response_1 = {"transactionId": transactionId, "message": "message 1"}
+    response_2 = {"transactionId": transactionId, "message": "message 2"}
 
     # 3. Construct http response object
-    responseObject: Dict[Any, Any] = dict()
-    responseObject["statusCode"] = 200
+    responseObject: Dict[str, Any] = dict()
+    responseObject["status_code"] = 200
     responseObject["headers"] = {"Content-Type": "application/json"}
-    responseObject["body"] = transactionResponse
+    responseObject["body"] = [response_1, response_2]
 
     # 4. Return the response object
     return responseObject
