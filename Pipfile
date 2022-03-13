@@ -6,6 +6,7 @@ name = "pypi"
 [packages]
 aws-lambda-powertools = "*"
 pydantic = "*"
+pynamodb = "*"
 
 [dev-packages]
 ipykernel = "*"

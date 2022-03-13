@@ -16,7 +16,7 @@ from src.data_ingestion.data_processing import (
     create_vessel_item,
     load_column_type_mappings,
 )
-from src.data_ingestion.pydantic_models import VesselItem
+from src.pydantic_models import VesselItem
 
 LOGGER = logging.getLogger()
 LOGGER.setLevel(logging.INFO)

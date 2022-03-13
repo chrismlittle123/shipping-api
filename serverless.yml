@@ -53,8 +53,11 @@ functions:
         - "!package.json"
       include:
         - "src/data_ingestion/**"
+        - "src/pynamo/**"
         - "data/**"
         - "src/__init__.py"
+    environment:
+      AWS_REGION: ${self:aws_region}
     destinations:
       onFailure: arn:aws:sqs:${self:aws_region}:${self:aws_account_id}:data-ingestion_dead_letter_queue
     timeout: 30
@@ -79,7 +82,10 @@ functions:
         - "!package.json"
       include:
         - "src/rest_api/**"
+        - "src/pynamo/**"
         - "src/__init__.py"
+      environment:
+        AWS_REGION: ${self:aws_region}
     destinations:
       onFailure: arn:aws:sqs:${self:aws_region}:${self:aws_account_id}:rest-api_dead_letter_queue
     timeout: 30

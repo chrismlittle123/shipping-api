@@ -22,7 +22,7 @@ def handler(event: dict, context: LambdaContext) -> dict:
     # 3. Construct http response object
     responseObject: Dict[str, Any] = dict()
     responseObject["status_code"] = 200
-    responseObject["headers"] = {"Content-Type": "application/json"}
+    responseObject["headers"] = {"content-type": "application/json"}
     responseObject["body"] = [response_1, response_2]
 
     # 4. Return the response object
