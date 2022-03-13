@@ -2,8 +2,6 @@ import csv
 import json
 import logging
 import urllib.parse
-from datetime import datetime
-from decimal import Decimal
 from typing import Generator, List, Optional, Union
 
 import boto3
@@ -16,7 +14,8 @@ from src.data_ingestion.data_processing import (
     create_vessel_item,
     load_column_type_mappings,
 )
-from src.data_ingestion.pydantic_models import VesselItem
+from src.models.pydantic_models import VesselItem
+from src.models.pynamo_models import VesselItemModel
 
 LOGGER = logging.getLogger()
 LOGGER.setLevel(logging.INFO)
@@ -43,38 +42,30 @@ def read_csv_from_s3(event: dict) -> Union[List[list], None]:
 
 
 def write_item_to_dynamodb(item: dict) -> None:
-
-    if item:
-        item = json.loads(json.dumps(item), parse_float=Decimal)
-
-        item["PK"] = "EU_MRV_EMISSIONS_DATA"
-        item[
-            "SK"
-        ] = f"REPORTING_PERIOD#{item['reporting_period']}#IMO_NUMBER#{item['imo_number']}"
-        item["updated_at"] = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
-
-        dynamodb_table = "shipping-data"
-
-        dynamodb = boto3.resource("dynamodb")
-
-        table = dynamodb.Table(dynamodb_table)
-        response = table.put_item(Item=item)
-
-        if response["ResponseMetadata"]["HTTPStatusCode"] != 200:
-            LOGGER.warning(
-                {
-                    "message": "Item could not be written to DynamoDB",
-                    "content": {
-                        "status_code": response["ResponseMetadata"]["HTTPStatusCode"],
-                        "item": item,
-                    },
-                }
-            )
+    vessel_item = VesselItemModel.write_vessel_item(item)
+    if not vessel_item:
+        LOGGER.warning(
+            {
+                "message": "Item could not be written to DynamoDB",
+                "content": {
+                    "item": item,
+                },
+            }
+        )
 
 
 def process_raw_vessel_data(
     vessel_data_raw: dict, column_type_mappings: dict
 ) -> Optional[dict]:
+    """Process vessel data from raw form to clean nested and modelled dictionary
+
+    Args:
+        vessel_data_raw (dict): Raw vessel data as a flat dictionary
+        column_type_mappings (dict): Mappings of column names to data types
+
+    Returns:
+        Optional[dict]: Cleaned, nested dictioniary with vessel data
+    """
     try:
         reporting_period = vessel_data_raw["reporting_period"]
         imo_number = vessel_data_raw["imo_number"]
@@ -101,23 +92,18 @@ def process_raw_vessel_data(
         return None
 
 
-# TO DO: Create API endpoints - get all data, get data based on year, get data based on imo number, get data based on name
-# TO DO: Write tests for writing to DynamoDB - ie. integration tests for write_item_to_dynamodb and read_csv_from_s3 functions
-# TO DO: Write end to end test - For example, one where I remove items from dynamoDB with certain IMO Numbers ("0000001", "0000002", "0000003", etc.)
-# then I upload a CSV file to a S3 file location called "raw/e2e", then wait for 5 seconds, then I make graphQL query requests for each one of these
-# vessels and check that the data matches.
-# TO DO: Add docstrings to classes and functions where appropriate
-# TO DO: Use sphinx to generate documentation for the Lambda
-# TO DO: Add explanation of project including documentation for DynamoDB table in a separated Markdown file inside a docs folder. Put images of diagrams in data folder.
-# TO DO: Get serverless deploy to work in GitHub Actions
-# TO DO: Remember to send zip folder with code to Ahmad by Sunday evening
-# TO DO: Think about table versioning or backups
-# TO DO: Think about monitoring this API - how do I track metrics and ensure it's not breaking?
-
-
 def get_vessel_generator(
     event: dict,
 ) -> Optional[Generator[Optional[dict], None, None]]:
+    """Create a vessel generator which generates clean vessel items
+
+    Args:
+        event (dict): S3 event
+
+    Returns:
+        Optional[Generator[Optional[dict], None, None]]: Generator that
+        yields clean vessel items
+    """
 
     csv_content = read_csv_from_s3(event)
     column_type_mappings = load_column_type_mappings()

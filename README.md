@@ -2,7 +2,19 @@
 
 An API which lets you access the EU-MRV public CO2 emission report: https://mrv.emsa.europa.eu/#public/emission-report
 
-# Requirements
+Access this REST API using the following endpoint:
+
+https://9i913fmws2.execute-api.eu-west-2.amazonaws.com/dev/vessels?reporting_period={reporting_period}&imo_number={imo_number}
+
+Eg.
+
+https://9i913fmws2.execute-api.eu-west-2.amazonaws.com/dev/vessels?reporting_period=2018&imo_number=5383304
+
+Given a reporting period and an IMO number, this API will return the data for that vessel in that reporting period.
+
+For further documentation see the `docs` folder.
+
+## Requirements
 
 - Python 3.9
 - Pipenv. Run `brew install pipenv` or `pip3 install pipenv`
@@ -25,7 +37,7 @@ Run tests:
 
 - `yarn test`
 
-# Invoke Lambda Locally
+## Invoke Lambda Locally
 
 Ensure you are logged into the AWS CLI and run:
 
@@ -33,8 +45,8 @@ Ensure you are logged into the AWS CLI and run:
 
 Where `lambda_name` is the name of the lambda in the serverless.yml file.
 
-# Deploy Serverless
+## Deploy Serverless
 
-Run the following comman:
+Run the following command:
 
 `pipenv run serverless deploy`

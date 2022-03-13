@@ -6,6 +6,7 @@ name = "pypi"
 [packages]
 aws-lambda-powertools = "*"
 pydantic = "*"
+pynamodb = "*"
 
 [dev-packages]
 ipykernel = "*"
@@ -13,6 +14,9 @@ pytest = "*"
 pytest-mock = "*"
 mypy = "*"
 boto3 = "*"
+moto = "*"
+freezegun = "*"
+
 
 [requires]
 python_version = "3.9"

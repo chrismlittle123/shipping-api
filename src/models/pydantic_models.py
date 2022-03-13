@@ -120,6 +120,10 @@ class DensityMetrics(BaseModel):
 
 
 class VesselItem(BaseModel):
+    """
+    Pydantic BaseModel which validates vessel item objects
+    """
+
     imo_number: str
     name: str
     ship_type: str

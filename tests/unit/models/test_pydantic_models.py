@@ -4,7 +4,7 @@ from datetime import date
 import pytest
 from pydantic import ValidationError
 
-from src.data_ingestion.pydantic_models import Boolean, Unit, VesselItem
+from src.models.pydantic_models import Boolean, Unit, VesselItem
 from tests.resources.vessel_data import VESSEL_ITEMS
 
 
