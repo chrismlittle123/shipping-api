@@ -53,8 +53,8 @@ functions:
         - "!package.json"
       include:
         - "src/data_ingestion/**"
-        - "src/pynamo/**"
-        - "data/**"
+        - "src/models/**"
+        - "data/config/**"
         - "src/__init__.py"
     destinations:
       onFailure: arn:aws:sqs:${self:aws_region}:${self:aws_account_id}:data-ingestion_dead_letter_queue
@@ -80,7 +80,7 @@ functions:
         - "!package.json"
       include:
         - "src/rest_api/**"
-        - "src/pynamo/**"
+        - "src/models/**"
         - "src/__init__.py"
     destinations:
       onFailure: arn:aws:sqs:${self:aws_region}:${self:aws_account_id}:rest-api_dead_letter_queue
