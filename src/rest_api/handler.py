@@ -4,6 +4,8 @@ from typing import Any, Dict
 
 from aws_lambda_powertools.utilities.typing import LambdaContext
 
+from src.pynamo_models import VesselItemModel
+
 LOGGER = logging.getLogger()
 LOGGER.setLevel(logging.INFO)
 
@@ -11,19 +13,15 @@ LOGGER.setLevel(logging.INFO)
 def handler(event: dict, context: LambdaContext) -> dict:
 
     LOGGER.info({"message": "Incoming API Gateway event", "content": json.dumps(event)})
-    # 1. Parse out query string params
-    transactionId = event["query"]["transactionId"]
 
-    # 2. Construct the body of the response object
+    reporting_period = event["query"]["reporting_period"]
+    imo_number = event["query"]["imo_number"]
 
-    response_1 = {"transactionId": transactionId, "message": "message 1"}
-    response_2 = {"transactionId": transactionId, "message": "message 2"}
+    vessel_item = VesselItemModel.read_vessel_item(reporting_period, imo_number)
 
-    # 3. Construct http response object
     responseObject: Dict[str, Any] = dict()
     responseObject["status_code"] = 200
     responseObject["headers"] = {"content-type": "application/json"}
-    responseObject["body"] = [response_1, response_2]
+    responseObject["body"] = vessel_item
 
-    # 4. Return the response object
     return responseObject
