@@ -74,19 +74,6 @@ resource "aws_api_gateway_method_settings" "rest_api_settings" {
   }
 }
 
-# Lambda Permission
-
-resource "aws_lambda_permission" "api_gateway" {
-  statement_id  = "AllowAPIGatewayInvoke"
-  action        = "lambda:InvokeFunction"
-  function_name = "${var.project}-${var.stage_name}-${var.service_name}"
-  principal     = "apigateway.amazonaws.com"
-
-  # The /*/* portion grants access from any method on any resource
-  # within the API Gateway "REST API".
-  source_arn = "${aws_api_gateway_rest_api.rest_api_name.execution_arn}/*/*"
-}
-
 # Dead Letter Queues
 
 resource "aws_sns_topic" "dead_letter_topic" {
