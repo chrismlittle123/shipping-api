@@ -69,7 +69,7 @@ functions:
     events:
       - http:
           method: get
-          path: vessel
+          path: vessels
           integration: lambda
     package:
       patterns:
