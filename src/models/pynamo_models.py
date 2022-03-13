@@ -7,7 +7,7 @@ from pynamodb.attributes import MapAttribute, NumberAttribute, UnicodeAttribute
 from pynamodb.exceptions import PutError
 from pynamodb.models import Model
 
-from src.pydantic_models import VesselItem
+from src.models.pydantic_models import VesselItem
 
 
 class ShippingData(Model):

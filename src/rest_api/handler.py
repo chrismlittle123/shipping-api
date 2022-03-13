@@ -4,7 +4,7 @@ from typing import Any, Dict
 
 from aws_lambda_powertools.utilities.typing import LambdaContext
 
-from src.pynamo_models import VesselItemModel
+from src.models.pynamo_models import VesselItemModel
 
 LOGGER = logging.getLogger()
 LOGGER.setLevel(logging.INFO)
