@@ -2,8 +2,6 @@ import csv
 import json
 import logging
 import urllib.parse
-from datetime import datetime
-from decimal import Decimal
 from typing import Generator, List, Optional, Union
 
 import boto3
@@ -17,6 +15,7 @@ from src.data_ingestion.data_processing import (
     load_column_type_mappings,
 )
 from src.pydantic_models import VesselItem
+from src.pynamo_models import VesselItemModel
 
 LOGGER = logging.getLogger()
 LOGGER.setLevel(logging.INFO)
@@ -43,33 +42,16 @@ def read_csv_from_s3(event: dict) -> Union[List[list], None]:
 
 
 def write_item_to_dynamodb(item: dict) -> None:
-
-    if item:
-        item = json.loads(json.dumps(item), parse_float=Decimal)
-
-        item["PK"] = "EU_MRV_EMISSIONS_DATA"
-        item[
-            "SK"
-        ] = f"REPORTING_PERIOD#{item['reporting_period']}#IMO_NUMBER#{item['imo_number']}"
-        item["updated_at"] = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
-
-        dynamodb_table = "shipping-data"
-
-        dynamodb = boto3.resource("dynamodb")
-
-        table = dynamodb.Table(dynamodb_table)
-        response = table.put_item(Item=item)
-
-        if response["ResponseMetadata"]["HTTPStatusCode"] != 200:
-            LOGGER.warning(
-                {
-                    "message": "Item could not be written to DynamoDB",
-                    "content": {
-                        "status_code": response["ResponseMetadata"]["HTTPStatusCode"],
-                        "item": item,
-                    },
-                }
-            )
+    vessel_item = VesselItemModel.write_vessel_item(item)
+    if not vessel_item:
+        LOGGER.warning(
+            {
+                "message": "Item could not be written to DynamoDB",
+                "content": {
+                    "item": item,
+                },
+            }
+        )
 
 
 def process_raw_vessel_data(
