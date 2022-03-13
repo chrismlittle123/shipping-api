@@ -14,14 +14,14 @@ def handler(event: dict, context: LambdaContext) -> dict:
 
     LOGGER.info({"message": "Incoming API Gateway event", "content": json.dumps(event)})
 
-    reporting_period = event["query"]["reporting_period"]
+    reporting_period = str(event["query"]["reporting_period"])
     imo_number = event["query"]["imo_number"]
 
     vessel_item = VesselItemModel.read_vessel_item(reporting_period, imo_number)
 
-    responseObject: Dict[str, Any] = dict()
-    responseObject["status_code"] = 200
-    responseObject["headers"] = {"content-type": "application/json"}
-    responseObject["body"] = vessel_item
+    response: Dict[str, Any] = dict()
+    response["status_code"] = 200
+    response["headers"] = {"content-type": "application/json"}
+    response["body"] = vessel_item
 
-    return responseObject
+    return response

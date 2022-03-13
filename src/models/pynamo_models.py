@@ -1,7 +1,7 @@
 import json
 import os
 from datetime import datetime
-from typing import Union
+from typing import List, Union
 
 from pynamodb.attributes import MapAttribute, NumberAttribute, UnicodeAttribute
 from pynamodb.exceptions import PutError
@@ -52,15 +52,18 @@ class VesselItemModel(ShippingData):
 
     @classmethod
     def read_vessel_item(
-        cls, reporting_period: int, imo_number: str
-    ) -> Union[dict, None]:
+        cls, reporting_period: str, imo_number: str
+    ) -> Union[List[dict], None]:
         try:
             pk = "EU_MRV_EMISSIONS_DATA"
             sk = f"REPORTING_PERIOD#{reporting_period}#IMO_NUMBER#{imo_number}"
+
             vessel_item = list(VesselItemModel.query(pk, VesselItemModel.sk == sk))[0]
+
             vessel_item_pydantic_model = VesselItem(
                 **vessel_item.convert_to_dictionary()
             )
+
             return json.loads(vessel_item_pydantic_model.json())
         except IndexError:
             return None
