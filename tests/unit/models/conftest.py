@@ -27,7 +27,7 @@ def shipping_data_table():
         dynamodb = boto3.resource("dynamodb", "eu-west-2")
 
         table = dynamodb.create_table(
-            TableName="purchasing_configs",
+            TableName="shipping-data",
             KeySchema=[
                 {"AttributeName": "PK", "KeyType": "HASH"},
                 {"AttributeName": "SK", "KeyType": "RANGE"},
