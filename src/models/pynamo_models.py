@@ -10,6 +10,10 @@ from pynamodb.models import Model
 from src.models.pydantic_models import VesselItem
 
 
+class VesselItemNotFound(Exception):
+    pass
+
+
 class ShippingData(Model):
     class Meta:
         table_name = "shipping-data"
@@ -70,7 +74,7 @@ class VesselItemModel(ShippingData):
 
             return json.loads(vessel_item_pydantic_model.json())
         except IndexError:
-            return None
+            raise VesselItemNotFound
 
     @classmethod
     def write_vessel_item(cls, item: dict) -> Union[dict, None]:
