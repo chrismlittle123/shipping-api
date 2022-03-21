@@ -79,7 +79,5 @@ functions:
         - "src/rest_api/**"
         - "src/models/**"
         - "src/__init__.py"
-    destinations:
-      onFailure: arn:aws:sqs:${self:aws_region}:${self:aws_account_id}:rest-api_dead_letter_queue
     timeout: 30
     memorySize: 1024
