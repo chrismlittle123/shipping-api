@@ -1,4 +1,5 @@
 service: shipping-api
+frameworkVersion: '3'
 # Variable names must be the same as in env.tfvars file
 aws_account_id: 495700631743
 aws_region: eu-west-2
@@ -7,8 +8,7 @@ project: shipping-api
 package:
   individually: true
   exclude:
-    - "*"
-    - "*/**"
+    - "**"
 
 provider:
   name: aws
@@ -17,19 +17,21 @@ provider:
   region: eu-west-2
   deploymentPrefix: serverless-lambdas
 
-
-
-custom:
-  pythonRequirements:
-    usePoetry: false
-    zip: true
-    slim: true
-    layer: true
-    useDownloadCache: true
-    useStaticCache: true
-
 plugins:
   - serverless-python-requirements
+  - serverless-prune-plugin
+
+custom:
+  prune:
+    automatic: true
+    number: 3
+  pythonRequirements:
+    usePoetry: false
+    layer:
+      name: ${self:service}-layer
+      description: Lambda layer with dependencies
+      compatibleRuntimes:
+        - python3.9
 functions:
   data-ingestion:
     description: "Lambda that ingests and cleans raw shipping data"
@@ -73,11 +75,6 @@ functions:
           path: vessels
           integration: lambda
     package:
-      patterns:
-        - "!node_modules/**"
-        - "!yarn.lock"
-        - "!package-lock.json"
-        - "!package.json"
       include:
         - "src/rest_api/**"
         - "src/models/**"
