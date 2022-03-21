@@ -10,7 +10,8 @@ I built a data pipeline which:
 
 I also built an API endpoint that lets you get data for a vessel given the reporting period and the IMO number.
 
-https://pcl7xw863m.execute-api.eu-west-2.amazonaws.com/dev/vessels?reporting_period={reporting_period}&imo_number={imo_number}
+https://8d12si93v8.execute-api.eu-west-2.amazonaws.com/dev/vessels?reporting_period={reporting_period}&imo_number={imo_number}
+
 
 # Data Architecture
 
