@@ -4,11 +4,11 @@ An API which lets you access the EU-MRV public CO2 emission report: https://mrv.
 
 Access this REST API using the following endpoint:
 
-https://9i913fmws2.execute-api.eu-west-2.amazonaws.com/dev/vessels?reporting_period={reporting_period}&imo_number={imo_number}
+https://8d12si93v8.execute-api.eu-west-2.amazonaws.com/dev/vessels?reporting_period={reporting_period}&imo_number={imo_number}
 
 Eg.
 
-https://9i913fmws2.execute-api.eu-west-2.amazonaws.com/dev/vessels?reporting_period=2018&imo_number=5383304
+https://8d12si93v8.execute-api.eu-west-2.amazonaws.com/dev/vessels?reporting_period=2018&imo_number=5383304
 
 Given a reporting period and an IMO number, this API will return the data for that vessel in that reporting period.
 
