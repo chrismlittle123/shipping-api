@@ -1,14 +1,15 @@
 {
   "name": "shipping-api",
   "version": "0.1.0",
-  "devDependencies": {
-    "serverless": "^2.67.0",
-    "serverless-python-requirements": "^5.3.1"
+  "dependencies": {
+    "serverless": "^3.7.9",
+    "serverless-python-requirements": "^5.4.0",
+    "serverless-prune-plugin": "^2.0.1"
   },
   "scripts": {
     "install-python-deps": "pipenv install --dev",
     "test": "pipenv run python3 -m pytest tests",
     "mypy": "pipenv run mypy",
-    "deploy-serverless": "serverless deploy"
+    "deploy-serverless": "pipenv run serverless deploy"
   }
 }
