@@ -22,7 +22,7 @@ resource "aws_s3_bucket" "shipping_api_bucket" {
   bucket = "${var.project}-${var.aws_account_id}"
 }
 
-resource "aws_dynamodb_table" "shipping-data" {
+resource "aws_dynamodb_table" "shipping_data" {
   name           = "shipping-data"
   read_capacity  = 200
   write_capacity = 200
