@@ -35,12 +35,12 @@ jobs:
       - name: Terraform Plan
         id: plan
         if: github.event_name == 'push'
-        run: terraform plan -no-color -var-file env.dev.tfvars
+        run: terraform plan -destroy -no-color -var-file env.dev.tfvars
         continue-on-error: false
 
       - name: Terraform Apply
         if: github.event_name == 'push'
-        run: terraform apply -auto-approve -var-file env.dev.tfvars
+        run: terraform apply -destroy -auto-approve -var-file env.dev.tfvars
 
   # serverless:
   #   runs-on: ubuntu-latest
